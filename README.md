@@ -14,6 +14,14 @@
 > promised* and *what the recorded session shows*. Drishti-PAM is the
 > detector that reads the deviation, not the surface.
 
+## AI Use Disclosure
+
+Parts of this project were developed with the assistance of AI tools, including large language models such as [e.g., ChatGPT / Claude / GitHub Copilot / Perplexity]. AI was used for [e.g., brainstorming, code suggestions, debugging, documentation drafting].
+
+All AI-generated output was reviewed, tested, and edited by the author, who is responsible for the final code, design decisions, and documentation. The project's research ideas, methodology, and conclusions are the author's own.
+
+This software is provided "as is", without warranty. Because AI-assisted code may contain errors or security flaws, review and test it before using it in any production or security-critical environment. Do not input sensitive or confidential data (credentials, logs, or personal information) into any AI-assisted component without proper safeguards.
+
 ## What this repository contains
 
 A reproducible, two-detector pipeline for catching insider-risk
