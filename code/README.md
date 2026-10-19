@@ -17,7 +17,7 @@ The trained classifier wins on F1 by 0.0015 — it trades 17 missed attacks agai
 
 ```powershell
 # Windows 10/11 — fastest path, mock backend, ~15 seconds end-to-end
-git clone https://github.com/YOUR-USER/drishti-pam.git
+git clone https://github.com/camseye/drishti-pam.git
 cd drishti-pam/code
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1

@@ -65,7 +65,7 @@ FROM python:3.13-alpine AS runtime
 
 LABEL org.opencontainers.image.title="drishti-pam" \
       org.opencontainers.image.description="Drishti-PAM — hybrid structural-deviation detection for privileged-access monitoring." \
-      org.opencontainers.image.source="https://github.com/YOUR-USER/drishti-pam" \
+      org.opencontainers.image.source="https://github.com/camseye/drishti-pam" \
       org.opencontainers.image.licenses="MIT"
 
 ENV PYTHONDONTWRITEBYTECODE=1 \

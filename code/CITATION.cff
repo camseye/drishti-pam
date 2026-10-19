@@ -18,7 +18,7 @@ abstract: >
   dashboard, and a two-tier dashboard (headline hero + operator triage
   console) that surfaces every model decision against per-session ground
   truth.
-repository-code: "https://github.com/YOUR-USER/drishti-pam"
+repository-code: "https://github.com/camseye/drishti-pam"
 keywords:
   - "privileged access management"
   - "insider risk"

@@ -1,7 +1,7 @@
 # Drishti-PAM
 *The gaze that sees beyond the surface — hybrid structural-deviation detection for privileged-access monitoring.*
 
-**Live dashboard**: <https://YOUR-USER.github.io/drishti-pam/>
+**Live dashboard**: <https://camseye.github.io/drishti-pam/>
 *(rebuilt and redeployed automatically on every push to `main` — see [GitHub Actions workflow](./.github/workflows/pages.yml))*
 
 > Sanskrit *दृष्टि (Drishti)* names the perception that reads structure
@@ -41,7 +41,7 @@ renders a graceful placeholder rather than failing.
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/YOUR-USER/drishti-pam.git
+git clone https://github.com/camseye/drishti-pam.git
 cd drishti-pam/code
 python -m venv .venv
 source .venv/bin/activate    # on Windows: .\.venv\Scripts\Activate.ps1
