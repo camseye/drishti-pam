@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+title: "Drishti-PAM — Hybrid Structural-Deviation Detection for Privileged-Access Monitoring"
+message: "If you use this software in academic or industrial work, please cite it using the metadata below."
+type: software
+authors:
+  - family-names: "REPLACE-WITH-YOUR-SURNAME"
+    given-names: "REPLACE-WITH-YOUR-FIRST-NAME"
+abstract: >
+  A reproducible, two-detector pipeline for catching insider-risk behaviour in
+  Privileged Access Management (PAM) session telemetry. A deterministic rule
+  baseline runs alongside a hybrid LLM classifier (DistilBERT text encoder + a
+  categorical MLP, late fusion, focal loss with class-weighted sampling); both
+  detectors are evaluated on the same held-out split so their numbers are
+  directly comparable. Includes a synthetic data generator covering twelve
+  insider-risk scenarios plus one adversarial vocabulary-cloak control (S16),
+  three SOAR/SIEM integration sketches (Splunk SPL, Microsoft Sentinel KQL,
+  Cortex XSOAR playbook), a multi-stage Dockerfile that packages the static
+  dashboard, and a two-tier dashboard (headline hero + operator triage
+  console) that surfaces every model decision against per-session ground
+  truth.
+repository-code: "https://github.com/YOUR-USER/drishti-pam"
+keywords:
+  - "privileged access management"
+  - "insider risk"
+  - "anomaly detection"
+  - "behavioural analytics"
+  - "synthetic data"
+  - "adversarial robustness"
+  - "DistilBERT"
+  - "focal loss"
+  - "cyber security"
+license: "MIT"
+version: "1.0.0"
+date-released: "2026-05-10"

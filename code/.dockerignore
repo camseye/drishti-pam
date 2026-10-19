@@ -1,0 +1,62 @@
+# =============================================================================
+# Drishti-PAM — .dockerignore
+# -----------------------------------------------------------------------------
+# Constrains the Docker build context so the image build is fast,
+# reproducible, and doesn't accidentally bake in trained-model
+# checkpoints or developer caches. Mirrors the .gitignore but is more
+# aggressive — anything not needed by `smoke.py --backend mock` +
+# `docs/build_dashboard.py` should be excluded.
+# =============================================================================
+
+# --- Generated artefacts (regenerated inside the builder stage) -------------
+data/
+docs/data/
+runs/
+results/
+checkpoints/
+*.log
+
+# --- Python tooling caches --------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# --- Virtual environments ---------------------------------------------------
+.venv/
+venv/
+env/
+ENV/
+
+# --- Hugging Face credential ------------------------------------------------
+.hf_token
+
+# --- Editor / OS metadata ---------------------------------------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Build artefacts --------------------------------------------------------
+build/
+dist/
+*.egg
+
+# --- Jupyter notebook state -------------------------------------------------
+.ipynb_checkpoints/
+
+# --- Git metadata (not needed at runtime) -----------------------------------
+.git/
+.gitattributes
+.gitignore
+
+# --- Docker scaffolding (avoid recursive include) ---------------------------
+Dockerfile
+.dockerignore

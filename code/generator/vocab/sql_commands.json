@@ -1,0 +1,32 @@
+{
+  "_doc": "SQL command pools for database_maintenance tickets. Each entry is [statement, is_destructive_flag].",
+  "readonly": [
+    ["SELECT pg_database_size('orders');", false],
+    ["SELECT count(*) FROM orders WHERE created_at >= NOW() - INTERVAL '1 day';", false],
+    ["SHOW VARIABLES LIKE 'max_connections';", false],
+    ["EXPLAIN ANALYZE SELECT * FROM payments WHERE id = 12345;", false],
+    ["SELECT * FROM information_schema.tables LIMIT 50;", false],
+    ["VACUUM ANALYZE orders;", false],
+    ["ANALYZE TABLE customers;", false],
+    ["SHOW PROCESSLIST;", false],
+    ["SELECT now();", false]
+  ],
+  "ddl": [
+    ["CREATE INDEX idx_orders_created_at ON orders(created_at);", false],
+    ["ALTER TABLE customers ADD COLUMN preferred_channel VARCHAR(32);", false],
+    ["REINDEX TABLE payments;", false],
+    ["DROP INDEX IF EXISTS idx_obsolete;", false]
+  ],
+  "destructive": [
+    ["DELETE FROM customers WHERE last_seen < NOW() - INTERVAL '5 years';", true],
+    ["UPDATE orders SET status = 'archived' WHERE created_at < NOW() - INTERVAL '90 days';", true],
+    ["TRUNCATE TABLE staging_imports;", true],
+    ["DROP TABLE IF EXISTS legacy_audit;", true]
+  ],
+  "mass_export": [
+    ["COPY (SELECT id, name, email, dob, ssn FROM customers) TO '/tmp/customers.csv' WITH CSV HEADER;", true],
+    ["SELECT * FROM payments INTO OUTFILE '/tmp/payments.tsv';", true],
+    ["pg_dump -d crm -t customers -f /tmp/customers.dump", true],
+    ["mysqldump -u root payments orders > /tmp/full_dump.sql", true]
+  ]
+}

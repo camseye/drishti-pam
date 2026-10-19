@@ -1,0 +1,62 @@
+| ============================================================================
+| Drishti-PAM — Splunk SPL detection sketch
+| ----------------------------------------------------------------------------
+| Maps the project's `code/data/rule_predictions.json` and
+| `code/data/llm_predictions.json` onto Splunk's search-processing language
+| so a SOC analyst can triage flagged PAM sessions inside Splunk Enterprise
+| or Splunk Cloud.
+|
+| Assumed data onboarding (one of two patterns; pick whichever your Splunk
+| admin prefers — the rest of this search is identical):
+|
+|   (A) File-monitor input on $SPLUNK_HOME/etc/apps/pam_triage/lookups/
+|       with sourcetype = pam:rule_predictions and a transforms.conf entry
+|       that exposes session_id, prediction, scenario_hits, confidence, and
+|       evidence as indexed fields. Recommended for ad-hoc / desk-side use.
+|
+|   (B) HEC (HTTP Event Collector) ingest with index="pam" and the same
+|       sourcetype, written from a small Python forwarder that POSTs each
+|       row of rule_predictions.json. Recommended for production use.
+|
+| The search below is deliberately readable in 50 lines so a SOC engineer
+| can audit it in a coffee break. It is a reference sketch; test it in your
+| own Splunk instance before production use.
+| ============================================================================
+
+index="pam" sourcetype="pam:rule_predictions"
+
+| where prediction="suspicious"
+
+| eval scenario_count = mvcount(scenario_hits)
+
+| eval risk = case(
+    confidence >= 0.92 AND scenario_count >= 2, "CRITICAL",
+    confidence >= 0.85,                          "HIGH",
+    confidence >= 0.70,                          "MEDIUM",
+    1==1,                                        "LOW")
+
+| eval scenario_list = mvjoin(scenario_hits, ",")
+| eval evidence_short = substr(evidence, 1, 120)
+
+| join type=left session_id [
+    search index="pam" sourcetype="pam:llm_predictions"
+    | rename confidence as llm_confidence, prediction as llm_prediction
+    | fields session_id, llm_prediction, llm_confidence ]
+
+| eval agreement = case(
+    prediction="suspicious" AND llm_prediction="suspicious", "both_flag",
+    prediction="suspicious" AND llm_prediction="clean",      "rule_only_flag",
+    prediction="clean"      AND llm_prediction="suspicious", "llm_only_flag",
+    1==1,                                                    "both_clean")
+
+| stats latest(risk) AS risk,
+        latest(scenario_list) AS scenarios,
+        latest(confidence) AS rule_conf,
+        latest(llm_confidence) AS llm_conf,
+        latest(agreement) AS agreement,
+        latest(evidence_short) AS evidence
+    BY session_id
+
+| sort - risk - rule_conf
+| head 200
+| outputlookup pam_alerts.csv

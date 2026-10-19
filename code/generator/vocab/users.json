@@ -1,0 +1,34 @@
+{
+  "_doc": "Synthetic privileged-access user pool with role hint. The role is used to bias requester/fetcher selection but is NOT exposed in the generated session records.",
+  "l2_dba": [
+    "alice.chen", "bob.kumar", "carla.singh", "dimitri.volkov", "evelyn.park"
+  ],
+  "l2_linux_admin": [
+    "frank.ho", "grace.lim", "henry.kelly", "ines.morales",
+    "jamal.osman", "kate.fischer", "liam.tanaka", "mia.rossi"
+  ],
+  "l2_windows_admin": [
+    "noah.patel", "olivia.brown", "peter.zhang", "quinn.adams", "rita.svensson"
+  ],
+  "l2_network_admin": [
+    "sam.ortiz", "tara.dubois", "umar.khan", "vera.kumar"
+  ],
+  "l2_cloud_engineer": [
+    "wendy.lee", "xavier.cole", "yara.al-amin", "zack.bauer", "anya.kovacs"
+  ],
+  "l3_incident_lead": [
+    "ben.osei", "clara.wu", "derek.maguire"
+  ],
+  "approver_manager": [
+    "greta.hall", "hugo.bianchi", "isla.nguyen"
+  ],
+  "approver_cab": [
+    "jonas.weiss", "kira.santos", "leo.papadopoulos"
+  ],
+  "application_owner": [
+    "maya.iverson", "nikhil.rao", "ophelia.bach"
+  ],
+  "security_operations": [
+    "piper.gold", "quincy.barr", "ravi.menon"
+  ]
+}

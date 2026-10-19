@@ -1,0 +1,53 @@
+name: Deploy dashboard to GitHub Pages
+
+# Builds the Drishti-PAM static dashboard and publishes it to GitHub
+# Pages on every push to main. One-time setup: Settings -> Pages ->
+# Source = "GitHub Actions".
+#
+# The hero KPIs read code/data/reference_comparison.json when it is
+# committed; everything else is regenerated from a 500-session mock run.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    defaults:
+      run:
+        working-directory: code
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Install mock-pipeline dependencies
+        run: pip install "faker>=22.0" "matplotlib>=3.8" "reportlab>=4.0" "tqdm>=4.66"
+
+      - name: Build dashboard data
+        run: |
+          python smoke.py --backend mock --num-sessions 500 --non-interactive
+          python docs/build_dashboard.py
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: code/docs
+
+      - id: deployment
+        uses: actions/deploy-pages@v5

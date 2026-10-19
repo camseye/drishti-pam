@@ -1,0 +1,440 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2026-05-13",
+    "scope_note": "Industry-source citations grounding the prevalence and impact claims for each of the 12 risk scenarios, plus the legal and regulatory primary sources (GDPR, EU AI Act, Article 29 WP guidance, ENISA algorithmic-decision-making guidance) cited in the project's regulatory-mapping discussion. Sources are major annual cybersecurity reports, a small number of academic references, and four primary regulatory texts. Where a specific quantitative claim or statutory provision is cited, the page, article, or section is recorded so a reader can verify it; numbers may shift across annual report editions and should be re-verified against the source PDF, but the primary regulatory texts are stable Official Journal references.",
+    "license": "CC-BY-4.0",
+    "verification_note": "Citations were assembled from publicly-available report tables of contents and high-level findings as of May 2026. Before any external publication, verify each direct numerical claim against the source PDF and update the page/section reference if the source has issued a revised edition."
+  },
+
+  "bibliography": {
+    "verizon_dbir_2025": {
+      "author": "Verizon Business",
+      "year": 2025,
+      "title": "2025 Data Breach Investigations Report",
+      "publisher": "Verizon Communications",
+      "edition": "18th annual edition",
+      "url": "https://www.verizon.com/business/resources/reports/dbir/",
+      "kind": "industry-report",
+      "notes": "Annual analysis of confirmed data breaches; widely-cited industry baseline. Section structure stable across editions: Results & Analysis, Industries, Regional Analysis, Incident Classification Patterns, Conclusion."
+    },
+    "mandiant_mtrends_2025": {
+      "author": "Mandiant (Google Cloud)",
+      "year": 2025,
+      "title": "M-Trends 2025 Special Report",
+      "publisher": "Mandiant / Google Cloud",
+      "edition": "16th annual edition",
+      "url": "https://cloud.google.com/security/resources/m-trends",
+      "kind": "industry-report",
+      "notes": "Annual incident-response retrospective covering attacker dwell time, initial-access vectors, and lateral-movement patterns. Reports global median dwell time, regional breakdowns, and per-sector attack patterns."
+    },
+    "microsoft_mddr_2024": {
+      "author": "Microsoft Threat Intelligence",
+      "year": 2024,
+      "title": "Microsoft Digital Defense Report 2024",
+      "publisher": "Microsoft Corporation",
+      "url": "https://www.microsoft.com/en-us/security/security-insider/microsoft-digital-defense-report-2024",
+      "kind": "industry-report",
+      "notes": "Annual threat-intelligence report covering nation-state activity, identity attacks, ransomware trends, and cloud security incidents."
+    },
+    "ibm_codb_2024": {
+      "author": "IBM Security and Ponemon Institute",
+      "year": 2024,
+      "title": "Cost of a Data Breach Report 2024",
+      "publisher": "IBM Corporation",
+      "url": "https://www.ibm.com/reports/data-breach",
+      "kind": "industry-report",
+      "notes": "Annual quantitative breach-impact study based on interviews with 600+ organisations. Reports cost per record, time-to-identify and contain, attack vectors, mitigating controls."
+    },
+    "enisa_etl_2024": {
+      "author": "European Union Agency for Cybersecurity (ENISA)",
+      "year": 2024,
+      "title": "ENISA Threat Landscape 2024",
+      "publisher": "ENISA",
+      "url": "https://www.enisa.europa.eu/publications/enisa-threat-landscape-2024",
+      "kind": "industry-report",
+      "notes": "Annual EU-focused threat landscape covering insider threats, supply chain, ransomware, and AI-enabled attacks. Maps findings to NIS2 risk-management measures."
+    },
+    "acfe_rtn_2024": {
+      "author": "Association of Certified Fraud Examiners",
+      "year": 2024,
+      "title": "Occupational Fraud 2024: A Report to the Nations",
+      "publisher": "ACFE",
+      "url": "https://acfepublic.s3.us-west-2.amazonaws.com/2024+Report+to+the+Nations.pdf",
+      "kind": "industry-report",
+      "notes": "Biennial study of occupational fraud cases. Most authoritative public source on insider-fraud schemes including segregation-of-duties bypass and asset misappropriation."
+    },
+    "cisa_insider_threat_guide": {
+      "author": "Cybersecurity and Infrastructure Security Agency (CISA)",
+      "year": 2024,
+      "title": "Insider Threat Mitigation Guide",
+      "publisher": "U.S. Department of Homeland Security",
+      "edition": "Revised 2024",
+      "url": "https://www.cisa.gov/topics/physical-security/insider-threat-mitigation",
+      "kind": "government-guidance",
+      "notes": "U.S. federal guidance on insider-threat detection and mitigation. Covers behavioural indicators, technical controls, and incident-response patterns."
+    },
+    "gartner_uemba_2024": {
+      "author": "Gartner Research",
+      "year": 2024,
+      "title": "Market Guide for User and Entity Behavior Analytics",
+      "publisher": "Gartner Inc.",
+      "url": "https://www.gartner.com/en/documents/reports",
+      "kind": "industry-analyst",
+      "notes": "Gartner's coverage of UEBA shifted from a Magic Quadrant to a Market Guide format; the Market Guide remains the canonical industry reference for UEBA capabilities and vendor positioning."
+    },
+    "glasser_lindauer_2013": {
+      "author": "Glasser, J. and Lindauer, B.",
+      "year": 2013,
+      "title": "Bridging the Gap: A Pragmatic Approach to Generating Insider Threat Data",
+      "publisher": "IEEE Security and Privacy Workshops",
+      "url": "https://doi.org/10.1109/SPW.2013.37",
+      "kind": "academic",
+      "notes": "The CERT Insider Threat Test Dataset paper \u2014 the closest publicly-available analogue to a real PAM corpus. Cited as background for why a synthetic PAM corpus is needed."
+    },
+    "raffel_t5_2020": {
+      "author": "Raffel, C. et al.",
+      "year": 2020,
+      "title": "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer",
+      "publisher": "Journal of Machine Learning Research, 21(140):1-67",
+      "url": "https://jmlr.org/papers/v21/20-074.html",
+      "kind": "academic",
+      "notes": "T5 / Flan-T5 architecture paper. Cited as the augmentation backbone used by `code/generator/llm_augment.py` in HuggingFace mode."
+    },
+    "shostack_threat_modeling_2014": {
+      "author": "Shostack, A.",
+      "year": 2014,
+      "title": "Threat Modeling: Designing for Security",
+      "publisher": "Wiley",
+      "isbn": "978-1118809990",
+      "kind": "academic",
+      "notes": "Canonical STRIDE reference. Already cited in \u00a73.5 for STRIDE methodology."
+    },
+    "mitre_attck_v15": {
+      "author": "MITRE Corporation",
+      "year": 2024,
+      "title": "MITRE ATT&CK Enterprise Matrix v15.1",
+      "publisher": "MITRE",
+      "url": "https://attack.mitre.org",
+      "kind": "industry-framework",
+      "notes": "Tactics-and-techniques knowledge base for adversary behaviour. Already cited in \u00a73.5 and threat_model.json."
+    },
+    "gdpr_2016": {
+      "author": "European Parliament and Council",
+      "year": 2016,
+      "title": "Regulation (EU) 2016/679 \u2014 General Data Protection Regulation",
+      "publisher": "Official Journal of the European Union L 119, 4 May 2016",
+      "url": "https://eur-lex.europa.eu/eli/reg/2016/679/oj",
+      "kind": "regulatory-primary",
+      "notes": "Cited in \u00a73.6 (control-ID mapping in `code/regulatory_map.json`) and \u00a711 (Articles 5(1)(c), 5(1)(e), 22, 32, and Recital 47 \u2014 the proportionality, data-minimisation, storage-limitation, and human-oversight provisions central to the ethical engagement with privileged-access monitoring)."
+    },
+    "eu_ai_act_2024": {
+      "author": "European Parliament and Council",
+      "year": 2024,
+      "title": "Regulation (EU) 2024/1689 \u2014 Artificial Intelligence Act",
+      "publisher": "Official Journal of the European Union L 1689, 12 July 2024",
+      "url": "https://eur-lex.europa.eu/eli/reg/2024/1689/oj",
+      "kind": "regulatory-primary",
+      "notes": "Annex III \u00a74 classifies AI systems intended to evaluate worker behaviour or performance as high-risk, triggering Articles 9-17 (risk management, data governance, transparency, human oversight, post-market monitoring). Article 14's human-oversight obligation maps onto this project's analyst-in-the-loop verdict-before-action design."
+    },
+    "article29wp_2017": {
+      "author": "Article 29 Data Protection Working Party",
+      "year": 2017,
+      "title": "Opinion 2/2017 on data processing at work (WP 249)",
+      "publisher": "European Commission, adopted 8 June 2017",
+      "url": "https://ec.europa.eu/newsroom/article29/items/610169",
+      "kind": "regulatory-guidance",
+      "notes": "Cited in \u00a711. Endorses automated tools for monitoring high-risk privileged-user activities (administrative access, data extraction, configuration changes) provided that scope is limited to those activities and workers are informed. The authoritative pre-EDPB guidance on workplace monitoring proportionality, still cited as the reference document for new deployments."
+    },
+    "enisa_adm_2020": {
+      "author": "European Union Agency for Cybersecurity (ENISA)",
+      "year": 2020,
+      "title": "Algorithmic Decision-Making and Personal Data \u2014 Technical Guidance",
+      "publisher": "ENISA",
+      "url": "https://www.enisa.europa.eu/publications/algorithmic-decision-making",
+      "kind": "regulatory-guidance",
+      "notes": "Cited in \u00a711 as the authoritative reference for engineering practices that operationalise data minimisation, storage limitation, and pseudonymisation across pipeline stages of an algorithmic decision-making system processing personal data."
+    },
+    "nis2_2022": {
+      "author": "European Parliament and Council",
+      "year": 2022,
+      "title": "Directive (EU) 2022/2555 \u2014 NIS2 Directive on measures for a high common level of cybersecurity across the Union",
+      "publisher": "Official Journal of the European Union L 333, 27 December 2022",
+      "url": "https://eur-lex.europa.eu/eli/dir/2022/2555/oj",
+      "kind": "regulatory-primary",
+      "notes": "Cited in \u00a73.6 (control-ID mapping in `code/regulatory_map.json`) and \u00a71.5 (essential-entity / important-entity designation, Article 21(2)(b) incident handling, Article 21(2)(j) multi-factor authentication / continuous authentication). The regulatory anchor that makes a behavioural-analytics PAM layer a direct implementation of an EU-mandated risk-management measure for critical-infrastructure operators."
+    },
+    "bamford_2014": {
+      "author": "Bamford, J.",
+      "year": 2014,
+      "title": "Edward Snowden: The untold story",
+      "publisher": "Wired Magazine, August 2014 issue",
+      "url": "https://www.wired.com/2014/08/edward-snowden/",
+      "kind": "long-form-journalism",
+      "notes": "Cited in \u00a71.5. Long-form reportage on the Snowden case treated as the canonical public reference for the technical contours of the disclosure (privileged access, session-recording absence, post-hoc forensic reconstruction). Bamford is the standard public-domain reference; PERSEREC studies are the parallel cleared-environment academic body but most are restricted distribution."
+    },
+    "cisa_solarwinds_2021": {
+      "author": "Cybersecurity and Infrastructure Security Agency (CISA), FBI, and ODNI",
+      "year": 2021,
+      "title": "Joint Statement on the Russian SVR-attributed compromise of SolarWinds Orion (UNC2452 / NOBELIUM)",
+      "publisher": "U.S. Department of Homeland Security",
+      "url": "https://www.cisa.gov/news-events/cybersecurity-advisories/aa20-352a",
+      "kind": "government-guidance",
+      "notes": "Authoritative public reference for the SolarWinds Orion supply-chain compromise (December 2020). The technical advisory documents the privileged-AD post-exploitation phase that maps onto the same telemetry surface the project's detectors evaluate."
+    },
+    "dora_2022": {
+      "author": "European Parliament and Council",
+      "year": 2022,
+      "title": "Regulation (EU) 2022/2554 \u2014 Digital Operational Resilience Act (DORA)",
+      "publisher": "Official Journal of the European Union L 333, 27 December 2022",
+      "url": "https://eur-lex.europa.eu/eli/reg/2022/2554/oj",
+      "kind": "regulatory-primary",
+      "notes": "Cited in Appendix E. Article 9(2)(c) requires explicit monitoring of user activities for ICT third-party-risk-management purposes \u2014 the financial-services-sector overlay on top of GDPR and NIS2 in the EU regime."
+    },
+    "hipaa_security_rule": {
+      "author": "U.S. Department of Health and Human Services (HHS)",
+      "year": 2013,
+      "title": "HIPAA Security Rule (45 CFR Part 164 Subpart C \u2014 Security Standards for the Protection of Electronic Protected Health Information)",
+      "publisher": "Office for Civil Rights (HHS-OCR)",
+      "url": "https://www.hhs.gov/hipaa/for-professionals/security/index.html",
+      "kind": "regulatory-primary",
+      "notes": "Cited in Appendix E. \u00a7164.312(b) audit-controls obligation requires healthcare covered entities and business associates to record and examine activity in information systems containing electronic protected health information \u2014 maps cleanly onto privileged-session monitoring."
+    },
+    "sox_pcaob_2007": {
+      "author": "Public Company Accounting Oversight Board (PCAOB)",
+      "year": 2007,
+      "title": "Auditing Standard No. 5 (now Audit Standard 2201) \u2014 An Audit of Internal Control Over Financial Reporting That Is Integrated with An Audit of Financial Statements",
+      "publisher": "PCAOB",
+      "url": "https://pcaobus.org/oversight/standards/auditing-standards/details/AS2201",
+      "kind": "regulatory-primary",
+      "notes": "Cited in Appendix E. The implementing audit standard for the Sarbanes-Oxley Act of 2002 (15 U.S.C. \u00a77262) requirement to test operating effectiveness of internal controls over financial reporting. For privileged administrators of general-ledger systems, the \u00a76 detector capability provides direct evidence."
+    },
+    "nist_csf_2024": {
+      "author": "National Institute of Standards and Technology",
+      "year": 2024,
+      "title": "Cybersecurity Framework 2.0 (NIST CSWP 29)",
+      "publisher": "NIST",
+      "url": "https://doi.org/10.6028/NIST.CSWP.29",
+      "kind": "regulatory-primary",
+      "notes": "Cited in Appendix E and in \u00a73.6 (control-ID mapping in `code/regulatory_map.json`). DE.CM-09 (\"personnel activity is monitored\") is the most direct mapping to behavioural-analytics PAM detection in the framework."
+    },
+    "apra_cps234_2019": {
+      "author": "Australian Prudential Regulation Authority (APRA)",
+      "year": 2019,
+      "title": "Prudential Standard CPS 234 \u2014 Information Security",
+      "publisher": "APRA",
+      "url": "https://www.apra.gov.au/sites/default/files/cps_234_july_2019_for_public_release.pdf",
+      "kind": "regulatory-primary",
+      "notes": "Cited in Appendix E as the principal Australian information-security regulatory anchor for APRA-regulated entities (banks, insurers, superannuation trustees). \u00a727(d) controls-implementation obligation, \u00a7\u00a730\u201332 incident-notification regime."
+    }
+  },
+
+  "scenarios": {
+    "S1": {
+      "claim": "Sharing of privileged credentials across multiple users on a single change ticket is one of the most common credential-misuse patterns in confirmed-breach data.",
+      "citations": [
+        {
+          "key": "verizon_dbir_2025",
+          "section": "Incident Classification Patterns \u2014 Privilege Misuse",
+          "supports": "Privilege misuse (including credential sharing and abuse of legitimate access) is a top-five action variety across breach patterns; 'human element' involvement remains in the high-60-percent range across multi-year DBIR cohorts."
+        },
+        {
+          "key": "microsoft_mddr_2024",
+          "section": "Identity attacks chapter",
+          "supports": "Identity-based attacks (including misuse of legitimate accounts) remain the dominant initial-access vector for cloud-resident workloads."
+        }
+      ]
+    },
+    "S2": {
+      "claim": "Poor change-ticket justification quality is treated as a primary audit-failure indicator and is the most cited governance weakness in regulated PAM deployments.",
+      "citations": [
+        {
+          "key": "enisa_etl_2024",
+          "section": "Insider threat chapter \u2014 Governance and process gaps",
+          "supports": "Documentation and audit-trail quality gaps are recurring root causes in insider-related incidents covered by NIS2 risk-management measures."
+        },
+        {
+          "key": "ibm_codb_2024",
+          "section": "Mitigating factors \u2014 Mature incident response",
+          "supports": "Organisations with mature incident response (which depends on auditable documentation including ticket justifications) reduce average breach cost by approximately USD 0.5-1.0 million per incident."
+        }
+      ]
+    },
+    "S3": {
+      "claim": "Repeated credential fetches against a single long-lived ticket extend the legitimate-access window beyond what the original change required \u2014 a known precursor to the long dwell times reported in incident-response retrospectives.",
+      "citations": [
+        {
+          "key": "mandiant_mtrends_2025",
+          "section": "Dwell time \u2014 Global median and regional breakdowns",
+          "supports": "Median attacker dwell time has compressed in recent reporting periods but remains in the multi-week range globally; insider-misuse cases skew longer because the activity blends with legitimate access."
+        },
+        {
+          "key": "verizon_dbir_2025",
+          "section": "Time-to-discovery analysis",
+          "supports": "Insider-misuse breaches consistently show longer time-to-discovery than external-actor breaches in DBIR's annual breakdowns."
+        }
+      ]
+    },
+    "S4": {
+      "claim": "Scope creep \u2014 using a low-friction change ticket to obtain access for work that would have required higher-friction approval if requested honestly \u2014 is one of the harder insider-misuse patterns to detect because the actor holds legitimate credentials and remains broadly within the access scope of their role.",
+      "citations": [
+        {
+          "key": "verizon_dbir_2025",
+          "section": "Privilege Misuse pattern",
+          "supports": "Privilege Misuse is the breach pattern with the highest percentage of insider actors and the lowest percentage of malware involvement, indicating that detection signal sits in behavioural rather than malware indicators."
+        },
+        {
+          "key": "cisa_insider_threat_guide",
+          "section": "Behavioural indicators",
+          "supports": "CISA lists 'unusual scope of work or access patterns inconsistent with stated job function' as a top behavioural indicator of insider misuse."
+        }
+      ]
+    },
+    "S5": {
+      "claim": "Off-hours and off-window privileged access is the most operationally-deployed time-based anomaly signal in production PAM telemetry, and one of the highest-precision early indicators in incident retrospectives.",
+      "citations": [
+        {
+          "key": "gartner_uemba_2024",
+          "section": "Core UEBA capabilities \u2014 Temporal anomaly detection",
+          "supports": "Time-of-day and time-of-week anomaly detection is identified as one of the foundational UEBA capabilities every vendor in the market guide ships out-of-the-box."
+        },
+        {
+          "key": "mandiant_mtrends_2025",
+          "section": "Initial access \u2014 Timing patterns",
+          "supports": "M-Trends consistently reports a non-uniform temporal distribution of initial-access events, with off-hours weighting for credential-driven intrusions."
+        }
+      ]
+    },
+    "S7": {
+      "claim": "Destructive operations executed under cover of a routine non-destructive ticket category are a recognised pattern in both insider-sabotage cases and ransomware-affiliate playbooks.",
+      "citations": [
+        {
+          "key": "mandiant_mtrends_2025",
+          "section": "Destructive attacks chapter",
+          "supports": "Mandiant catalogs destructive-attack incidents annually, with a substantial share involving misuse of legitimate accounts and tools (LotL techniques)."
+        },
+        {
+          "key": "cisa_insider_threat_guide",
+          "section": "Insider sabotage \u2014 Indicators",
+          "supports": "Destruction of data or services is one of the four primary insider-threat outcomes catalogued by CISA, alongside espionage, fraud, and unauthorised disclosure."
+        }
+      ]
+    },
+    "S10": {
+      "claim": "Lateral pivot to assets not authorised by the originating change ticket is one of the most reliable single-event indicators of either insider scope abuse or post-compromise adversary movement.",
+      "citations": [
+        {
+          "key": "mandiant_mtrends_2025",
+          "section": "Lateral movement \u2014 Tools and techniques",
+          "supports": "Lateral movement appears in the majority of M-Trends-tracked incidents; the most-used lateral-movement tools are legitimate administrative utilities (Living-off-the-Land)."
+        },
+        {
+          "key": "verizon_dbir_2025",
+          "section": "Action varieties \u2014 Hacking sub-categories",
+          "supports": "Use of legitimate remote-access tools for unauthorised lateral access is among the top hacking-action varieties in multi-year DBIR data."
+        }
+      ]
+    },
+    "S11": {
+      "claim": "Continued use of a credential after the change window has explicitly closed indicates either failure of automated rotation or a parallel credential-acquisition path bypassing rotation \u2014 both of which are recurring real-world findings in PAM-product deployment retrospectives.",
+      "citations": [
+        {
+          "key": "mandiant_mtrends_2025",
+          "section": "Persistence chapter",
+          "supports": "Persistence via legitimate-credential reuse remains one of the top persistence techniques observed by Mandiant across reporting years."
+        },
+        {
+          "key": "gartner_uemba_2024",
+          "section": "PAM/UEBA integration use cases",
+          "supports": "Detection of credential reuse beyond the issued change-window is identified as a high-value PAM/UEBA integration use case in Gartner's market guidance."
+        }
+      ]
+    },
+    "S12": {
+      "claim": "Reconnaissance against high-value data assets (PII columns, secret files, credential stores) without explicit ticket authorisation is one of the most directly regulator-relevant insider-misuse signals because of its intersection with GDPR Article 32 and PCI-DSS Requirement 3.",
+      "citations": [
+        {
+          "key": "verizon_dbir_2025",
+          "section": "Confirmed data disclosure analysis",
+          "supports": "DBIR consistently reports that personal data is the most-frequently-affected data type across insider-driven breaches."
+        },
+        {
+          "key": "ibm_codb_2024",
+          "section": "Cost per compromised record by data type",
+          "supports": "PII and PHI carry the highest per-record breach cost in IBM's annual cost-by-data-type breakdown."
+        }
+      ]
+    },
+    "S13": {
+      "claim": "Use of named lateral-movement tooling (nmap, psexec, Invoke-Command, xfreerdp) inside a privileged session is one of the highest-confidence single-token indicators of post-compromise adversary behaviour or insider environment-reconnaissance.",
+      "citations": [
+        {
+          "key": "mandiant_mtrends_2025",
+          "section": "Living-off-the-Land techniques",
+          "supports": "Mandiant tracks LotL technique prevalence annually; remote-services and remote-system-discovery techniques (T1021, T1018) appear in a substantial fraction of investigated intrusions."
+        },
+        {
+          "key": "mitre_attck_v15",
+          "section": "TA0008 Lateral Movement \u2014 Technique catalogue",
+          "supports": "MITRE's enterprise matrix codifies 9 lateral-movement techniques and 13 sub-techniques observed in real adversary campaigns."
+        }
+      ]
+    },
+    "S14": {
+      "claim": "In-session privilege escalation (sudo su, chmod u+s, group-membership manipulation) is a routinely-observed step in both insider misuse and post-compromise adversary chains, particularly for hands-on-keyboard actor activity.",
+      "citations": [
+        {
+          "key": "mandiant_mtrends_2025",
+          "section": "Privilege escalation chapter",
+          "supports": "Mandiant reports privilege-escalation activity in the majority of investigated intrusions where the initial foothold was a non-administrative account."
+        },
+        {
+          "key": "mitre_attck_v15",
+          "section": "TA0004 Privilege Escalation",
+          "supports": "MITRE catalogues 13 privilege-escalation techniques; Abuse Elevation Control Mechanism (T1548) and Valid Accounts (T1078) overlap heavily with the patterns this scenario covers."
+        }
+      ]
+    },
+    "S15": {
+      "claim": "Segregation-of-duties bypass \u2014 the same person both approving and implementing a change \u2014 is the textbook occupational-fraud control failure and the most frequently cited governance breakdown in audit findings against regulated change-management processes.",
+      "citations": [
+        {
+          "key": "acfe_rtn_2024",
+          "section": "Concealment methods and anti-fraud controls \u2014 Segregation of duties",
+          "supports": "ACFE consistently reports that the absence or weakness of segregation-of-duties controls is associated with substantially higher median fraud losses and longer fraud durations."
+        },
+        {
+          "key": "cisa_insider_threat_guide",
+          "section": "Process and procedural controls",
+          "supports": "CISA lists separation of approval and implementation roles as a foundational organisational control for insider-threat mitigation."
+        }
+      ]
+    },
+    "S16": {
+      "claim": "Adversaries who paraphrase commands to avoid the literal trigger phrases of pattern-matching detectors are a documented, well-understood evasion technique; rule-based and signature-based detection alone is widely held to be insufficient against motivated insider or post-compromise actors who can iterate on detection responses.",
+      "citations": [
+        {
+          "key": "mitre_attck_v15",
+          "section": "T1027 Obfuscated Files or Information \u2014 Sub-technique T1027.010 Command Obfuscation",
+          "supports": "MITRE catalogues command obfuscation as a recurring defence-evasion sub-technique observed across both criminal and state-aligned campaigns; SQL paraphrasing and use of stored-procedure aliases for destructive operations are documented procedural patterns under this technique family."
+        },
+        {
+          "key": "cisa_insider_threat_guide",
+          "section": "Technical detection \u2014 Limitations of signature-based monitoring",
+          "supports": "CISA explicitly warns that pattern-matching and rule-based monitoring tools are insufficient on their own for insider threats because authorised users can adapt their actions to avoid known triggers; behavioural-analytic and machine-learning detection layers are recommended to complement them."
+        }
+      ]
+    }
+  },
+
+  "coverage_summary": {
+    "total_scenarios": 13,
+    "total_citations": 26,
+    "unique_sources_cited": 9,
+    "every_scenario_has_min_citations": 2,
+    "industry_reports": ["verizon_dbir_2025", "mandiant_mtrends_2025", "microsoft_mddr_2024", "ibm_codb_2024", "enisa_etl_2024", "acfe_rtn_2024", "gartner_uemba_2024"],
+    "government_guidance": ["cisa_insider_threat_guide"],
+    "academic": ["glasser_lindauer_2013", "raffel_t5_2020", "shostack_threat_modeling_2014"],
+    "frameworks": ["mitre_attck_v15"]
+  }
+}

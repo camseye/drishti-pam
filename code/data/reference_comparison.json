@@ -1,0 +1,331 @@
+{
+  "reports": [
+    {
+      "detector": "rule",
+      "split": "test",
+      "n_predictions": 2000,
+      "binary": {
+        "tp": 550,
+        "fp": 24,
+        "fn": 50,
+        "tn": 1376,
+        "precision": 0.9582,
+        "recall": 0.9167,
+        "f1": 0.937,
+        "accuracy": 0.963
+      },
+      "predicted_suspicious": 574,
+      "predicted_clean": 1426,
+      "ground_truth_suspicious": 600,
+      "ground_truth_clean": 1400,
+      "per_scenario": {
+        "S1": {
+          "gt_count": 98,
+          "caught": 88,
+          "missed": 10,
+          "recall": 0.8979591836734694
+        },
+        "S2": {
+          "gt_count": 24,
+          "caught": 24,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S3": {
+          "gt_count": 102,
+          "caught": 102,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S4": {
+          "gt_count": 60,
+          "caught": 60,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S5": {
+          "gt_count": 30,
+          "caught": 30,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S7": {
+          "gt_count": 60,
+          "caught": 60,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S10": {
+          "gt_count": 60,
+          "caught": 60,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S11": {
+          "gt_count": 48,
+          "caught": 48,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S12": {
+          "gt_count": 30,
+          "caught": 30,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S13": {
+          "gt_count": 24,
+          "caught": 24,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S14": {
+          "gt_count": 18,
+          "caught": 18,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S15": {
+          "gt_count": 6,
+          "caught": 6,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S16": {
+          "gt_count": 40,
+          "caught": 0,
+          "missed": 40,
+          "recall": 0.0
+        }
+      },
+      "rule_fires": {
+        "S1": 87,
+        "S15": 11,
+        "S2": 56,
+        "S3": 102,
+        "S4": 60,
+        "S5": 30,
+        "S7": 60,
+        "S10": 60,
+        "S11": 48,
+        "S12": 40,
+        "S13": 24,
+        "S14": 18
+      }
+    },
+    {
+      "detector": "llm-trained",
+      "split": "test",
+      "n_predictions": 2000,
+      "binary": {
+        "tp": 557,
+        "fp": 4,
+        "fn": 43,
+        "tn": 1396,
+        "precision": 0.9929,
+        "recall": 0.9283,
+        "f1": 0.9595,
+        "accuracy": 0.9765
+      },
+      "predicted_suspicious": 561,
+      "predicted_clean": 1439,
+      "ground_truth_suspicious": 600,
+      "ground_truth_clean": 1400,
+      "per_scenario": {
+        "S1": {
+          "gt_count": 98,
+          "caught": 91,
+          "missed": 7,
+          "recall": 0.9285714285714286
+        },
+        "S2": {
+          "gt_count": 24,
+          "caught": 24,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S3": {
+          "gt_count": 102,
+          "caught": 102,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S4": {
+          "gt_count": 60,
+          "caught": 30,
+          "missed": 30,
+          "recall": 0.5
+        },
+        "S5": {
+          "gt_count": 30,
+          "caught": 30,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S7": {
+          "gt_count": 60,
+          "caught": 60,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S10": {
+          "gt_count": 60,
+          "caught": 60,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S11": {
+          "gt_count": 48,
+          "caught": 48,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S12": {
+          "gt_count": 30,
+          "caught": 30,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S13": {
+          "gt_count": 24,
+          "caught": 24,
+          "missed": 0,
+          "recall": 1.0
+        },
+        "S14": {
+          "gt_count": 18,
+          "caught": 17,
+          "missed": 1,
+          "recall": 0.9444444444444444
+        },
+        "S15": {
+          "gt_count": 6,
+          "caught": 1,
+          "missed": 5,
+          "recall": 0.16666666666666666
+        },
+        "S16": {
+          "gt_count": 40,
+          "caught": 40,
+          "missed": 0,
+          "recall": 1.0
+        }
+      },
+      "rule_fires": {}
+    }
+  ],
+  "scenario_order": [
+    "S1",
+    "S2",
+    "S3",
+    "S4",
+    "S5",
+    "S7",
+    "S10",
+    "S11",
+    "S12",
+    "S13",
+    "S14",
+    "S15",
+    "S16"
+  ],
+  "test_size": 2000,
+  "split_seed": 42,
+  "train_ratio": 0.8,
+  "agreement": {
+    "_doc": "Pairwise agreement between rule and llm-trained on the test split. The four aggregate counts are mutually exclusive and sum to test_size. by_ground_truth splits each cell across the suspicious / clean ground-truth label so downstream consumers can refer to specific sub-counts (e.g. 'rule-only true positives').",
+    "test_size": 2000,
+    "both_flag": 515,
+    "both_clean": 1380,
+    "rule_only_flag": 59,
+    "llm_only_flag": 46,
+    "by_ground_truth": {
+      "ground_truth_suspicious": {
+        "n": 600,
+        "both_TP": 514,
+        "rule_TP_only": 36,
+        "llm_TP_only": 43,
+        "both_FN": 7
+      },
+      "ground_truth_clean": {
+        "n": 1400,
+        "both_TN": 1373,
+        "rule_FP_only": 23,
+        "llm_FP_only": 3,
+        "both_FP": 1
+      }
+    }
+  },
+  "operational_metrics": {
+    "_doc": "Security-operational metrics derived from the test-split reports + agreement block. Every metric rests on the operational constants in `assumptions`; a reviewer who disagrees with any of those constants can re-run with `--fp-triage-minutes` / `--batch-cadence-minutes` / `--audit-window-hours` to substitute their own.",
+    "available": true,
+    "assumptions": {
+      "fp_triage_minutes_hi_baseline": 18.0,
+      "fp_triage_minutes_lo_baseline": 8.0,
+      "batch_cadence_minutes": 5.0,
+      "audit_window_hours": 24.0,
+      "_note": "hi_baseline is a Tier-2 analyst-shift mechanistic estimate; lo_baseline is Gartner UEBA Market Guide's lower-bracket figure. batch_cadence and audit_window are illustrative budgets; the synthetic corpus does not let either be measured."
+    },
+    "time_to_detect": {
+      "rule": {
+        "ttd_median_minutes_structural": 2.5,
+        "_note": "Half the assumed 5-minute batch cadence; structural budget under the synchronous-batch assumption, not measured."
+      },
+      "llm-trained": {
+        "ttd_median_minutes_structural": 2.5,
+        "_note": "Half the assumed 5-minute batch cadence; structural budget under the synchronous-batch assumption, not measured."
+      }
+    },
+    "false_positive_cost": {
+      "rule": {
+        "fp_count": 24,
+        "fp_minutes_hi_baseline": 432.0,
+        "fp_minutes_lo_baseline": 192.0,
+        "fp_hours_hi_baseline": 7.2,
+        "fp_hours_lo_baseline": 3.2
+      },
+      "llm-trained": {
+        "fp_count": 4,
+        "fp_minutes_hi_baseline": 72.0,
+        "fp_minutes_lo_baseline": 32.0,
+        "fp_hours_hi_baseline": 1.2,
+        "fp_hours_lo_baseline": 0.53
+      }
+    },
+    "alert_volume": {
+      "available": true,
+      "configurations": {
+        "rule_only_baseline": {
+          "alert_count": 574,
+          "reduction_vs_rule_pct": 0.0
+        },
+        "llm_only": {
+          "alert_count": 561,
+          "reduction_vs_rule_pct": 2.3
+        },
+        "disjunctive_ensemble": {
+          "alert_count": 620,
+          "reduction_vs_rule_pct": -8.0,
+          "_note": "Flag if EITHER detector fires. Slightly higher volume than rule-only by the llm_only_flag count; trades a small false-alarm rate increase for a small true-positive recall increase."
+        },
+        "conjunctive_ensemble": {
+          "alert_count": 515,
+          "reduction_vs_rule_pct": 10.3,
+          "_note": "Flag only if BOTH detectors fire. Lower volume than rule-only by the rule_only_flag count; trades some recall for very high precision; suitable for automated remediation pipelines (\u00a79.2)."
+        }
+      }
+    },
+    "mean_time_between_false_positives": {
+      "rule": {
+        "fp_count": 24,
+        "mtbf_fp_hours": 1.0,
+        "mtbf_fp_minutes": 60.0
+      },
+      "llm-trained": {
+        "fp_count": 4,
+        "mtbf_fp_hours": 6.0,
+        "mtbf_fp_minutes": 360.0
+      }
+    }
+  }
+}

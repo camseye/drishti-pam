@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Drishti-PAM · Hybrid PAM anomaly detection · research dashboard</title>
+  <meta name="description" content="Drishti-PAM — the gaze that sees beyond the surface. Hybrid structural-deviation detection for privileged-access monitoring. Reproducible two-detector pipeline (12-rule baseline + fine-tuned LLM classifier), adversarial vocabulary-cloak control, and security-operational metrics translated from F1 into analyst-hours.">
+  <meta name="color-scheme" content="dark light">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ===================================================== -->
+  <!--  HEADER                                                 -->
+  <!-- ===================================================== -->
+  <header class="topbar" role="banner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">▮</span>
+      <h1 class="brand-title">
+        <span class="brand-title-primary">Drishti-PAM</span>
+        <span class="brand-title-secondary">research&nbsp;dashboard</span>
+      </h1>
+    </div>
+    <nav class="topbar-nav" aria-label="Primary">
+      <a class="topbar-link" href="https://github.com/YOUR-USER/drishti-pam" data-link="github" rel="noopener">GitHub</a>
+      <button class="theme-toggle" type="button" aria-pressed="false" aria-label="Toggle light theme">
+        <span class="theme-icon-dark" aria-hidden="true">●</span>
+        <span class="theme-icon-light" aria-hidden="true">○</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- ===================================================== -->
+  <!--  HERO — project pitch + 3 headline KPIs.                -->
+  <!--  This section communicates the project to an executive  -->
+  <!--  reader in five seconds. The operator console below     -->
+  <!--  preserves the full Tier-2 SOC analyst triage workflow. -->
+  <!-- ===================================================== -->
+  <section class="hero" aria-labelledby="hero-headline">
+    <div class="hero-inner">
+      <p class="hero-eyebrow" lang="sa">दृष्टि <span class="hero-eyebrow-roman" lang="en">— Drishti — the gaze that sees beyond the surface</span></p>
+      <h2 class="hero-headline" id="hero-headline">Hybrid structural-deviation detection for privileged-access monitoring.</h2>
+      <p class="hero-blurb">A reproducible two-detector pipeline that catches insider-risk
+        behaviour in PAM session telemetry. The hybrid LLM detector matches a hand-written
+        rule baseline on F1 within fifteen ten-thousandths of a point and survives a
+        vocabulary-cloak adversarial control by structural construction — with the headline
+        F1 numbers translated into the operational language of analyst-hours per audit window.</p>
+
+      <ul class="hero-kpis" aria-label="Headline numbers">
+        <li class="hero-kpi" data-kpi="hero-f1">
+          <p class="hero-kpi-label">Combined F1</p>
+          <p class="hero-kpi-value" data-bind="hero_f1_value">—</p>
+          <p class="hero-kpi-sub" data-bind="hero_f1_sub">2,000-session test partition · seed = 17</p>
+        </li>
+        <li class="hero-kpi" data-kpi="hero-agreement">
+          <p class="hero-kpi-label">Detector agreement</p>
+          <p class="hero-kpi-value" data-bind="hero_agreement_value">—</p>
+          <p class="hero-kpi-sub" data-bind="hero_agreement_sub">rule vs hybrid LLM · same call on the test split</p>
+        </li>
+        <li class="hero-kpi" data-kpi="hero-opcost">
+          <p class="hero-kpi-label">Analyst-hours saved</p>
+          <p class="hero-kpi-value" data-bind="hero_opcost_value">—</p>
+          <p class="hero-kpi-sub" data-bind="hero_opcost_sub">false-positive triage cost · per audit window</p>
+        </li>
+      </ul>
+
+      <div class="hero-cta" role="group" aria-label="Project links">
+        <a class="hero-cta-primary" href="https://github.com/YOUR-USER/drishti-pam" data-link="github-cta" rel="noopener">View on GitHub →</a>
+        <a class="hero-cta-tertiary" href="#/triage" data-link="console-cta">Open the operator console ↓</a>
+      </div>
+
+      <p class="hero-footnote">
+        <span class="hero-footnote-label">For a SOC operator:</span>
+        the triage console below is the working surface — filters,
+        risk-distribution donut, scenario × detector-agreement chart, threat-coverage tile,
+        per-session drawer. The hero numbers come from the frozen reference run on the
+        2,000-session test partition; the operator console renders whatever corpus
+        is currently loaded from <code>code/data/</code>.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!--  TAB STRIP — switches between the two views.            -->
+  <!--  Hash routing (#/triage, #/data) lives in app.js.       -->
+  <!-- ===================================================== -->
+  <nav class="tab-strip" aria-label="Dashboard views">
+    <a class="tab-link" href="#/triage" data-tab="triage">
+      <span class="tab-icon" aria-hidden="true">▸</span>
+      <span class="tab-label">Triage Console</span>
+      <span class="tab-sub">model outputs &middot; per-session risk + compliance</span>
+    </a>
+    <a class="tab-link" href="#/data" data-tab="data">
+      <span class="tab-icon" aria-hidden="true">▸</span>
+      <span class="tab-label">Data Source</span>
+      <span class="tab-sub">model inputs &middot; the raw synthetic corpus</span>
+    </a>
+  </nav>
+
+  <!-- ===================================================== -->
+  <!--  VIEW 1 / 2 — Triage Console (default)                  -->
+  <!-- ===================================================== -->
+  <section class="view view--triage" data-view="triage">
+
+  <!-- ===================================================== -->
+  <!--  KPI STRIP                                              -->
+  <!-- ===================================================== -->
+  <section class="kpi-strip" aria-label="Headline metrics">
+    <article class="kpi-card" data-kpi="sessions">
+      <div class="kpi-label">Sessions scored</div>
+      <div class="kpi-value" data-bind="n_sessions">—</div>
+      <div class="kpi-sub">test partition · both detectors</div>
+    </article>
+    <article class="kpi-card kpi-card--accent-warn" data-kpi="risky">
+      <div class="kpi-label">Flagged risky</div>
+      <div class="kpi-value">
+        <span data-bind="n_risky">—</span>
+        <span class="kpi-pct" data-bind="n_risky_pct">—</span>
+      </div>
+      <div class="kpi-sub">CRITICAL + HIGH + MEDIUM</div>
+    </article>
+    <article class="kpi-card kpi-card--accent-warn" data-kpi="noncompliant">
+      <div class="kpi-label">Non-compliant</div>
+      <div class="kpi-value">
+        <span data-bind="n_noncompliant">—</span>
+        <span class="kpi-pct" data-bind="n_noncompliant_pct">—</span>
+      </div>
+      <div class="kpi-sub">≤2 of 5 policy signals pass</div>
+    </article>
+    <article class="kpi-card" data-kpi="top-scenario">
+      <div class="kpi-label">Top scenario</div>
+      <div class="kpi-value kpi-value--scen" data-bind="top_scenario">—</div>
+      <div class="kpi-sub">
+        <span class="kpi-sub-tag" data-bind="top_scenario_id">—</span>
+        <span data-bind="top_scenario_count">—</span>&nbsp;sessions
+      </div>
+    </article>
+    <article class="kpi-card kpi-card--accent-good" data-kpi="f1">
+      <div class="kpi-label">Combined F1</div>
+      <div class="kpi-value" data-bind="combined_f1">—</div>
+      <div class="kpi-sub">
+        P&nbsp;<span data-bind="combined_precision">—</span>
+        · R&nbsp;<span data-bind="combined_recall">—</span>
+      </div>
+    </article>
+    <article class="kpi-card" data-kpi="deploy">
+      <div class="kpi-label">Deployment</div>
+      <div class="kpi-value" data-bind="deploy_status">—</div>
+      <div class="kpi-sub" data-bind="deploy_sub">
+        Dockerfile + SOAR/SIEM sketches
+      </div>
+    </article>
+    <article class="kpi-card kpi-card--accent-warn" data-kpi="opcost">
+      <div class="kpi-label">FP triage cost</div>
+      <div class="kpi-value" data-bind="opcost_value">—</div>
+      <div class="kpi-sub" data-bind="opcost_sub">
+        false-positive triage cost
+      </div>
+    </article>
+  </section>
+
+  <!-- ===================================================== -->
+  <!--  MAIN GRID: filters (sidebar) + content                 -->
+  <!-- ===================================================== -->
+  <div class="main-grid">
+
+    <!-- ============== FILTER PANEL ============== -->
+    <aside class="filter-panel" aria-label="Filters">
+      <header class="filter-panel-header">
+        <h2>Filters</h2>
+        <button class="filter-clear" type="button" data-action="clear-filters">Clear</button>
+      </header>
+
+      <div class="filter-group">
+        <label class="filter-label" for="filter-risk">Risk rating</label>
+        <select class="filter-select" id="filter-risk" data-filter="risk_rating">
+          <option value="">All</option>
+          <option value="CRITICAL">Critical</option>
+          <option value="HIGH">High</option>
+          <option value="MEDIUM">Medium</option>
+          <option value="LOW">Low</option>
+          <option value="MINIMAL">Minimal</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label" for="filter-compliance">Compliance</label>
+        <select class="filter-select" id="filter-compliance" data-filter="compliance">
+          <option value="">All</option>
+          <option value="non_compliant">Non-compliant</option>
+          <option value="partially_compliant">Partially compliant</option>
+          <option value="fully_compliant">Fully compliant</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label" for="filter-scenario">Scenario (ground truth)</label>
+        <select class="filter-select" id="filter-scenario" data-filter="scenario_gt">
+          <option value="">All</option>
+          <!-- options injected by app.js from /data/summary.json -->
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label" for="filter-agreement">Detector agreement</label>
+        <select class="filter-select" id="filter-agreement" data-filter="agreement">
+          <option value="">All</option>
+          <option value="both_flag">Both flag</option>
+          <option value="rule_only_flag">Rule only</option>
+          <option value="llm_only_flag">LLM only</option>
+          <option value="both_clean">Both clean</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label class="filter-label" for="filter-search">User or asset</label>
+        <input class="filter-input" id="filter-search" type="search"
+               data-filter="search"
+               placeholder="frank.ho, host-app-…"
+               autocomplete="off">
+      </div>
+
+      <footer class="filter-panel-footer">
+        <span class="filter-count">
+          <span data-bind="filtered_count">—</span> /
+          <span data-bind="total_count">—</span> shown
+        </span>
+      </footer>
+    </aside>
+
+    <!-- ============== CONTENT ============== -->
+    <main class="content" role="main">
+
+      <!-- Risk-distribution donut -->
+      <section class="card chart-card" aria-labelledby="risk-donut-h">
+        <header class="card-header">
+          <h2 id="risk-donut-h">Risk distribution</h2>
+          <p class="card-subtitle">5-level rating across the visible sessions</p>
+        </header>
+        <div class="chart-card-body">
+          <div class="chart-canvas-wrap">
+            <canvas id="risk-donut"></canvas>
+          </div>
+          <ul class="chart-legend" id="risk-legend">
+            <!-- populated by app.js -->
+          </ul>
+        </div>
+      </section>
+
+      <!-- Scenario × detector-agreement stacked bar -->
+      <section class="card chart-card" aria-labelledby="scenario-chart-h">
+        <header class="card-header">
+          <h2 id="scenario-chart-h">Detector agreement per suspicious scenario</h2>
+          <p class="card-subtitle">
+            For each ground-truth scenario, how often did the rule and
+            LLM agree, disagree, or both miss?
+            <em>Both clean</em> bars on a suspicious scenario are
+            <strong>missed detections</strong> &mdash; the highest-value
+            triage signal. Updates with the filters above. Genuinely
+            clean sessions are excluded so the suspicious bars stay readable.
+          </p>
+        </header>
+        <div class="chart-card-body chart-card-body--bar">
+          <div class="chart-canvas-wrap chart-canvas-wrap--bar">
+            <canvas id="scenario-chart"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============== THREAT COVERAGE TILE ============== -->
+      <!-- Compact static block: technique / tactic / phase counts +    -->
+      <!-- top-6 ATT&CK techniques with scenario counts. Rendered once  -->
+      <!-- from data/threat_model.json on initial load (independent of  -->
+      <!-- the filters above). Source: code/threat_model.json.          -->
+      <section class="card threat-card" aria-labelledby="threat-card-h">
+        <header class="card-header">
+          <h2 id="threat-card-h">Threat coverage</h2>
+          <p class="card-subtitle">
+            How the 12 risk scenarios map onto MITRE
+            ATT&amp;CK Enterprise (<span data-bind="attck_version">v15.1</span>),
+            STRIDE, and the Cyber Kill Chain. Static reference &mdash;
+            doesn&rsquo;t change with the filters above. Full per-scenario
+            mapping in <code>code/threat_model.json</code>.
+          </p>
+        </header>
+        <div class="threat-card-body">
+          <ul class="threat-stats" id="threat-stats" aria-label="Coverage statistics">
+            <!-- populated by app.js -->
+          </ul>
+          <div class="threat-techs">
+            <h3 class="threat-techs-title">Top ATT&amp;CK techniques by scenario count</h3>
+            <ul class="threat-tech-list" id="threat-tech-list">
+              <!-- populated by app.js -->
+            </ul>
+            <p class="threat-empty" id="threat-empty" hidden>
+              <code>data/threat_model.json</code> not loaded &mdash; rebuild
+              with <code>python docs/build_dashboard.py</code> from
+              <code>code/</code>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============== EXPLAINERS ============== -->
+      <section class="explainer-row" aria-label="Methodology explainers">
+
+        <details class="card explainer-card">
+          <summary>
+            <span class="explainer-icon" aria-hidden="true">▸</span>
+            <span class="explainer-title">How is risk decided?</span>
+            <span class="explainer-hint">Click to expand</span>
+          </summary>
+          <div class="explainer-body">
+            <p>
+              Every session is checked by <strong>two independent
+              detectors</strong>. Their two opinions are combined into a
+              5-level risk rating.
+            </p>
+            <ul class="explainer-list">
+              <li>
+                <strong>Rules detector.</strong> Twelve hand-written
+                rules look for specific patterns
+                (multi-user tickets, destructive commands on
+                read-only tickets, off-window sessions, etc.).
+                Outputs <em>suspicious</em> or <em>clean</em>, plus
+                the list of rules that fired. The thirteenth scenario
+                (S16, vocabulary-cloak adversarial) is intentionally
+                outside rule coverage — by design, paraphrased
+                destructive SQL evades the rule detector entirely.
+              </li>
+              <li>
+                <strong>LLM detector.</strong> A fine-tuned language
+                model reads the full session and outputs a probability
+                from <code>0</code> (very confident clean) to
+                <code>1</code> (very confident suspicious). The
+                <em>suspicious</em> call is taken at &ge;&nbsp;0.5.
+              </li>
+            </ul>
+            <table class="explainer-table">
+              <thead>
+                <tr>
+                  <th>Rule says</th>
+                  <th>LLM says</th>
+                  <th>Extra condition</th>
+                  <th>Risk</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>Suspicious</td><td>Suspicious</td>
+                    <td>LLM &ge; 0.92 <em>and</em> &ge; 2 distinct rules fired</td>
+                    <td><span class="badge badge--critical">CRITICAL</span></td></tr>
+                <tr><td>Suspicious</td><td>Suspicious</td>
+                    <td>any other</td>
+                    <td><span class="badge badge--high">HIGH</span></td></tr>
+                <tr><td>Suspicious</td><td>Clean</td>
+                    <td>—</td>
+                    <td><span class="badge badge--medium">MEDIUM</span></td></tr>
+                <tr><td>Clean</td><td>Suspicious</td>
+                    <td>LLM &ge; 0.70</td>
+                    <td><span class="badge badge--medium">MEDIUM</span></td></tr>
+                <tr><td>Clean</td><td>Suspicious</td>
+                    <td>LLM &lt; 0.70</td>
+                    <td><span class="badge badge--low">LOW</span></td></tr>
+                <tr><td>Clean</td><td>Clean</td>
+                    <td>—</td>
+                    <td><span class="badge badge--minimal">MINIMAL</span></td></tr>
+              </tbody>
+            </table>
+            <p class="explainer-rationale">
+              <strong>Why this design.</strong> When both detectors
+              agree, confidence is high. When only one fires, the
+              analyst needs to know <em>which one</em> — the rules
+              are interpretable (<em>"rule S7 fired because the
+              session ran a DROP TABLE on a read-only ticket"</em>),
+              the LLM is sensitive but harder to explain. Showing
+              both signals separately and combining them transparently
+              is the whole point of the hybrid setup.
+            </p>
+          </div>
+        </details>
+
+        <details class="card explainer-card">
+          <summary>
+            <span class="explainer-icon" aria-hidden="true">▸</span>
+            <span class="explainer-title">How is compliance decided?</span>
+            <span class="explainer-hint">Click to expand</span>
+          </summary>
+          <div class="explainer-body">
+            <p>
+              <strong>Compliance is independent of the
+              suspicious-or-not question.</strong> Even genuinely-clean
+              sessions can be partially or non-compliant if (for
+              example) they run after hours or have a thin
+              justification — and that's exactly what an analyst
+              would want surfaced in a real PAM review.
+            </p>
+            <p>Five workplace-policy signals get checked per session:</p>
+            <ol class="explainer-list">
+              <li>
+                <strong>Justification length.</strong> Has the ticket
+                got a meaningful explanation? <em>(&ge; 12 words.)</em>
+              </li>
+              <li>
+                <strong>Command count.</strong> Is the session under
+                the soft cap? <em>(&le; 50 commands.)</em>
+              </li>
+              <li>
+                <strong>Business hours.</strong> Did the session start
+                during business hours? <em>(Mon&ndash;Fri, 09:00&ndash;18:00.)</em>
+              </li>
+              <li>
+                <strong>Sensitive keywords.</strong> Are any
+                PII columns, secret files, or dangerous commands
+                in the command stream? <em>(None expected.)</em>
+              </li>
+              <li>
+                <strong>Justification &harr; command overlap.</strong>
+                Does the explanation mention any of the actual
+                commands? <em>(&ge; 1 shared keyword.)</em>
+              </li>
+            </ol>
+            <table class="explainer-table">
+              <thead>
+                <tr>
+                  <th>Signals passed</th>
+                  <th>Compliance</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td>5 / 5</td>
+                    <td><span class="pill pill--full">Compliant</span></td></tr>
+                <tr><td>4 / 5</td>
+                    <td><span class="pill pill--partial">Partial</span></td></tr>
+                <tr><td>0 &ndash; 3 / 5</td>
+                    <td><span class="pill pill--non">Non-compliant</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+
+      </section>
+
+      <!-- Session table -->
+      <section class="card table-card" aria-labelledby="session-table-h">
+        <header class="card-header">
+          <h2 id="session-table-h">Sessions</h2>
+          <p class="card-subtitle">Click any row to open the session detail drawer.</p>
+        </header>
+
+        <div class="table-scroll">
+          <table class="session-table" id="session-table">
+            <thead>
+              <tr>
+                <th data-sort="id">Session</th>
+                <th data-sort="user">User</th>
+                <th data-sort="host">Asset</th>
+                <th data-sort="scenario_gt">Scenario</th>
+                <th data-sort="rule_call">Rule</th>
+                <th data-sort="llm_score">LLM</th>
+                <th data-sort="risk_rating">Risk</th>
+                <th data-sort="compliance">Compliance</th>
+              </tr>
+            </thead>
+            <tbody id="session-tbody">
+              <!-- populated by app.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="table-footer">
+          <button class="page-btn" type="button" data-action="prev-page" disabled>← Prev</button>
+          <span class="page-status">
+            Page <span data-bind="page_current">1</span> of <span data-bind="page_total">1</span>
+          </span>
+          <button class="page-btn" type="button" data-action="next-page">Next →</button>
+        </footer>
+      </section>
+
+    </main>
+  </div>
+
+  </section> <!-- /view--triage -->
+
+  <!-- ===================================================== -->
+  <!--  VIEW 2 / 2 — Data Source                               -->
+  <!--  Hidden by default; shown by app.js when the URL hash   -->
+  <!--  is #/data. data.js owns all rendering for this view    -->
+  <!--  and only fetches sessions_raw.json on first reveal.    -->
+  <!-- ===================================================== -->
+  <section class="view view--data" data-view="data" hidden>
+
+    <header class="data-header">
+      <h2 class="data-title">Synthetic data source</h2>
+      <p class="data-subtitle">
+        All <strong data-bind="raw_total">—</strong> generated PAM sessions
+        &mdash; the raw inputs the rule and LLM detectors score.
+        Use this view to inspect the corpus the model trained and
+        evaluated on. Switch to the
+        <a href="#/triage">Triage Console</a> tab to see what the
+        detectors did with these inputs.
+      </p>
+    </header>
+
+    <div class="main-grid">
+
+      <!-- Data-focused filter panel -->
+      <aside class="filter-panel filter-panel--data" aria-label="Data source filters">
+        <header class="filter-panel-header">
+          <h2>Filters</h2>
+          <button class="filter-clear"
+                  type="button"
+                  data-action="clear-data-filters">Clear</button>
+        </header>
+
+        <div class="filter-group">
+          <label class="filter-label" for="data-filter-split">Split</label>
+          <select class="filter-select"
+                  id="data-filter-split"
+                  data-data-filter="split">
+            <option value="">All</option>
+            <option value="train">Train</option>
+            <option value="test">Test</option>
+            <option value="unknown">Unknown</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="data-filter-label">Label</label>
+          <select class="filter-select"
+                  id="data-filter-label"
+                  data-data-filter="label_gt">
+            <option value="">All</option>
+            <option value="suspicious">Suspicious</option>
+            <option value="clean">Clean</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="data-filter-scenario">Scenario</label>
+          <select class="filter-select"
+                  id="data-filter-scenario"
+                  data-data-filter="scenario_gt">
+            <option value="">All</option>
+            <!-- options injected by data.js -->
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="data-filter-category">Ticket category</label>
+          <select class="filter-select"
+                  id="data-filter-category"
+                  data-data-filter="ticket_category">
+            <option value="">All</option>
+            <!-- options injected by data.js -->
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="data-filter-search">User or asset</label>
+          <input class="filter-input"
+                 id="data-filter-search"
+                 type="search"
+                 data-data-filter="search"
+                 placeholder="frank.ho, host-app-…"
+                 autocomplete="off">
+        </div>
+
+        <footer class="filter-panel-footer">
+          <span class="filter-count">
+            <span data-bind-data="filtered_count">—</span> /
+            <span data-bind-data="total_count">—</span> shown
+          </span>
+        </footer>
+      </aside>
+
+      <main class="content" role="main">
+
+        <section class="card table-card" aria-labelledby="data-table-h">
+          <header class="card-header">
+            <h2 id="data-table-h">Generated sessions</h2>
+            <p class="card-subtitle">
+              Every row is one synthetic PAM session as produced by the
+              generator. No model output here &mdash; cross-reference any
+              session against the
+              <a href="#/triage">Triage Console</a> by clicking its ID
+              once a row is selected.
+            </p>
+          </header>
+
+          <div class="table-scroll">
+            <table class="session-table data-table" id="data-table">
+              <thead>
+                <tr>
+                  <th data-data-sort="id">Session</th>
+                  <th data-data-sort="split">Split</th>
+                  <th data-data-sort="label_gt">Label</th>
+                  <th data-data-sort="scenario_gt">Scenario</th>
+                  <th data-data-sort="user">User</th>
+                  <th data-data-sort="host">Asset</th>
+                  <th data-data-sort="ticket_id">Ticket</th>
+                  <th data-data-sort="ticket_category">Category</th>
+                  <th data-data-sort="ticket_approver">Approver</th>
+                  <th data-data-sort="start_time">Start</th>
+                  <th data-data-sort="change_window_start">Change&nbsp;window</th>
+                  <th data-data-sort="command_count" class="num">#&nbsp;Cmd</th>
+                  <th data-data-sort="named_assets_count" class="num">#&nbsp;Assets</th>
+                  <th data-data-sort="vault_fetches_count" class="num">#&nbsp;Vault</th>
+                  <th>Justification</th>
+                </tr>
+              </thead>
+              <tbody id="data-tbody">
+                <!-- populated by data.js -->
+              </tbody>
+            </table>
+          </div>
+
+          <footer class="table-footer">
+            <button class="page-btn"
+                    type="button"
+                    data-action="data-prev-page" disabled>← Prev</button>
+            <span class="page-status">
+              Page <span data-bind-data="page_current">1</span> of
+              <span data-bind-data="page_total">1</span>
+            </span>
+            <button class="page-btn"
+                    type="button"
+                    data-action="data-next-page">Next →</button>
+          </footer>
+        </section>
+
+      </main>
+    </div>
+
+  </section> <!-- /view--data -->
+
+  <!-- ===================================================== -->
+  <!--  SESSION DETAIL DRAWER                                  -->
+  <!-- ===================================================== -->
+  <aside class="drawer"
+         id="session-drawer"
+         aria-hidden="true"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="drawer-title">
+    <div class="drawer-overlay" data-action="close-drawer"></div>
+    <article class="drawer-panel">
+      <header class="drawer-header">
+        <div class="drawer-title-row">
+          <div class="drawer-title-block">
+            <p class="drawer-eyebrow" id="drawer-eyebrow">SESSION</p>
+            <h2 id="drawer-title" class="drawer-title">—</h2>
+          </div>
+          <button class="drawer-close"
+                  type="button"
+                  data-action="close-drawer"
+                  aria-label="Close session details">&times;</button>
+        </div>
+        <div class="drawer-meta">
+          <span class="badge" id="drawer-risk">—</span>
+          <span class="pill" id="drawer-compliance">—</span>
+          <span class="drawer-meta-sub" id="drawer-meta-sub">—</span>
+        </div>
+      </header>
+
+      <div class="drawer-body" id="drawer-body">
+        <p class="drawer-loading">Loading session details…</p>
+      </div>
+    </article>
+  </aside>
+
+  <!-- ===================================================== -->
+  <!--  FOOTER                                                 -->
+  <!-- ===================================================== -->
+  <footer class="sitefoot">
+    <small>
+      Risk = hybrid agreement·score · Compliance = 5-signal policy ·
+      Data refreshed <span data-bind="generated_at">—</span>
+    </small>
+  </footer>
+
+  <!-- =========================================================== -->
+  <!--  Chart.js loaded async; app.js waits on window.Chart before   -->
+  <!--  rendering the donut. SHA-384 SRI hash pins the bundle so the -->
+  <!--  CDN cannot ship a tampered build.                            -->
+  <!-- =========================================================== -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"
+          integrity="sha384-NrKB+u6Ts6AtkIhwPixiKTzgSKNblyhlk0Sohlgar9UHUBzai/sgnNNWWd291xqt"
+          crossorigin="anonymous"
+          defer></script>
+  <script src="app.js" defer></script>
+  <script src="data.js" defer></script>
+
+</body>
+</html>

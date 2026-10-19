@@ -1,0 +1,24 @@
+{
+  "_doc": "Commands indicative of S14 (privilege escalation). Detects attempts to become root, grant new privileges to oneself, set SUID bits, or modify privileged group memberships outside what the ticket authorised.",
+  "elevation_patterns": [
+    "sudo su -", "sudo -i", "sudo -s",
+    "su -", "su root",
+    "setuid", "chmod u+s", "chmod 4755", "chmod 4777",
+    "usermod -aG sudo", "usermod -aG wheel", "usermod -aG admin",
+    "gpasswd -a", "adduser to sudo",
+    "visudo", "/etc/sudoers.d/",
+    "Set-LocalGroupMember", "net localgroup administrators",
+    "Add-LocalGroupMember -Group Administrators",
+    "powershell Start-Process -Verb RunAs"
+  ],
+  "escalation_command_examples": [
+    "sudo su - root",
+    "sudo chmod u+s /usr/bin/find",
+    "sudo usermod -aG sudo svc-deployer",
+    "sudo gpasswd -a alice.chen wheel",
+    "echo 'svc-deployer ALL=(ALL) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/svc-deployer",
+    "net localgroup administrators attacker /add",
+    "Add-LocalGroupMember -Group Administrators -Member 'svc-deployer'",
+    "sudo chmod 4777 /tmp/shell"
+  ]
+}

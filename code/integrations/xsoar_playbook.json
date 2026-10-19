@@ -1,0 +1,150 @@
+{
+  "id": "playbook-pam-triage-soar",
+  "version": -1,
+  "name": "PAM Triage — SOAR sketch",
+  "description": "Stitches a CRITICAL-severity PAM-detector alert from Splunk SPL or Sentinel KQL into a five-task analyst-handoff workflow. Sketch — not validated against a live XSOAR tenant.",
+  "starttaskid": "0",
+  "fromversion": "6.5.0",
+  "tags": ["pam", "insider-threat", "sketch"],
+  "system": false,
+  "tasks": {
+    "0": {
+      "id": "0",
+      "taskid": "00000000-0000-0000-0000-000000000000",
+      "type": "start",
+      "task": {
+        "id": "00000000-0000-0000-0000-000000000000",
+        "name": "",
+        "version": -1,
+        "type": "start",
+        "iscommand": false
+      },
+      "nexttasks": { "#none#": ["1"] },
+      "view": "{\"position\":{\"x\":50,\"y\":50}}"
+    },
+    "1": {
+      "id": "1",
+      "taskid": "11111111-1111-1111-1111-111111111111",
+      "type": "regular",
+      "task": {
+        "id": "11111111-1111-1111-1111-111111111111",
+        "name": "Fetch session details",
+        "description": "Pulls the full PAM session record (commands, vault fetches, ticket metadata) from the upstream PAM platform via REST. Stub: a real deployment would call CyberArk PSM REST API endpoint /API/Recordings/${incident.session_id}.",
+        "version": -1,
+        "type": "regular",
+        "scriptName": "HttpV2",
+        "brand": ""
+      },
+      "scriptarguments": {
+        "method": { "simple": "GET" },
+        "url":    { "simple": "${pam_api_base}/API/Recordings/${incident.session_id}" }
+      },
+      "nexttasks": { "#none#": ["2"] },
+      "view": "{\"position\":{\"x\":50,\"y\":200}}"
+    },
+    "2": {
+      "id": "2",
+      "taskid": "22222222-2222-2222-2222-222222222222",
+      "type": "regular",
+      "task": {
+        "id": "22222222-2222-2222-2222-222222222222",
+        "name": "Enrich user from HR",
+        "description": "Looks up the privileged user's HR profile (department, manager, recent role changes) so the analyst sees organisational context next to the technical alert. Stub: real deployment maps to your SCIM / Workday / SailPoint integration.",
+        "version": -1,
+        "type": "regular",
+        "scriptName": "ADGetUser",
+        "brand": "Active Directory Query v2"
+      },
+      "scriptarguments": {
+        "username": { "simple": "${incident.session_user}" }
+      },
+      "nexttasks": { "#none#": ["3"] },
+      "view": "{\"position\":{\"x\":50,\"y\":350}}"
+    },
+    "3": {
+      "id": "3",
+      "taskid": "33333333-3333-3333-3333-333333333333",
+      "type": "condition",
+      "task": {
+        "id": "33333333-3333-3333-3333-333333333333",
+        "name": "CRITICAL severity?",
+        "description": "Routes CRITICAL alerts (LLM confidence ≥ 0.92 AND ≥ 2 distinct rules fired — the same threshold the dashboard's risk algorithm uses) to Tier-2 with HIGH severity; everything else stays with Tier-1 at MEDIUM. Mirrors the dashboard explainer table verbatim.",
+        "version": -1,
+        "type": "condition",
+        "iscommand": false
+      },
+      "conditions": [
+        {
+          "label": "yes",
+          "condition": [[
+            { "operator": "isEqualString",
+              "left":  { "value": { "simple": "incident.risk_rating" } },
+              "right": { "value": { "simple": "CRITICAL" } } }
+          ]]
+        }
+      ],
+      "nexttasks": {
+        "yes":    ["4a"],
+        "#default#": ["4b"]
+      },
+      "view": "{\"position\":{\"x\":50,\"y\":500}}"
+    },
+    "4a": {
+      "id": "4a",
+      "taskid": "44444444-4444-4444-4444-44444444444a",
+      "type": "regular",
+      "task": {
+        "id": "44444444-4444-4444-4444-44444444444a",
+        "name": "Assign Tier-2 (HIGH)",
+        "description": "Routes the incident to the Tier-2 SOC queue, raises severity to HIGH, posts a summary to the #soc-tier-2 Slack channel. Tier-2 closes the loop with a confirmed/false-positive verdict that becomes feedback for the next model retrain (see playbook gap below).",
+        "version": -1,
+        "type": "regular",
+        "scriptName": "AssignAnalystToIncident",
+        "brand": "Builtin"
+      },
+      "scriptarguments": {
+        "assign_to": { "simple": "soc-tier-2" },
+        "severity":  { "simple": "3" }
+      },
+      "nexttasks": { "#none#": ["5"] },
+      "view": "{\"position\":{\"x\":-100,\"y\":650}}"
+    },
+    "4b": {
+      "id": "4b",
+      "taskid": "44444444-4444-4444-4444-44444444444b",
+      "type": "regular",
+      "task": {
+        "id": "44444444-4444-4444-4444-44444444444b",
+        "name": "Assign Tier-1 (MEDIUM)",
+        "description": "Default branch — Tier-1 SOC handles HIGH / MEDIUM / LOW alerts at MEDIUM severity. Tier-1 escalates to Tier-2 if needed; otherwise closes with their own verdict.",
+        "version": -1,
+        "type": "regular",
+        "scriptName": "AssignAnalystToIncident",
+        "brand": "Builtin"
+      },
+      "scriptarguments": {
+        "assign_to": { "simple": "soc-tier-1" },
+        "severity":  { "simple": "2" }
+      },
+      "nexttasks": { "#none#": ["5"] },
+      "view": "{\"position\":{\"x\":200,\"y\":650}}"
+    },
+    "5": {
+      "id": "5",
+      "taskid": "55555555-5555-5555-5555-555555555555",
+      "type": "title",
+      "task": {
+        "id": "55555555-5555-5555-5555-555555555555",
+        "name": "Wait for analyst verdict",
+        "description": "End-of-sketch marker. A production playbook would here implement: (a) WaitForIncidentClosure with a 24-hour SLA timer, (b) on confirmed_true_positive → AutoRevokeVaultCredential + open follow-up case, (c) on false_positive → append to feedback queue feeding the quarterly model retrain. These three branches are the natural extension and are NOT in this stub.",
+        "version": -1,
+        "type": "title",
+        "iscommand": false
+      },
+      "view": "{\"position\":{\"x\":50,\"y\":800}}"
+    }
+  },
+  "view": "{\"linkLabelsPosition\":{},\"paper\":{\"dimensions\":{\"height\":900,\"width\":600,\"x\":-200,\"y\":0}}}",
+  "inputs": [],
+  "outputs": []
+}

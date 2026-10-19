@@ -1,0 +1,5 @@
+# Placeholder so the empty data/ directory is tracked by git.
+# The /code/data/* rule in the repository-root .gitignore excludes
+# generated artefacts but allowlists this file plus
+# reference_comparison.json so the live GitHub Pages dashboard can
+# show canonical Kaggle numbers when that snapshot is committed.

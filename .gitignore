@@ -1,0 +1,60 @@
+# Repository-root .gitignore for Drishti-PAM.
+# Paths that start with "/" are anchored to the repository root.
+
+# Internal-only working folders (paper drafts, personal notes,
+# replication snapshots). They live next to code/ locally but are
+# never published.
+/paper/
+/notes/
+
+# Generated pipeline output. Regenerate with `python smoke.py`.
+# Two frozen snapshot files are allowlisted: reference_comparison.json
+# populates the dashboard's hero KPIs on the live site, and .gitkeep
+# keeps the empty folder in the repository.
+/code/data/*
+!/code/data/.gitkeep
+!/code/data/reference_comparison.json
+/code/runs/
+/code/results/
+/code/checkpoints/
+
+# Dashboard data layer. Rebuilt by `python docs/build_dashboard.py`
+# locally and by the GitHub Pages workflow on every push.
+/code/docs/data/
+
+# Hugging Face credential — keep this secret
+.hf_token
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.log
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Build artefacts
+build/
+dist/
+*.egg
+
+# Jupyter notebook state
+.ipynb_checkpoints/

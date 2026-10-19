@@ -1,0 +1,62 @@
+{
+  "_doc": "Business-justification text templates per ticket category. Placeholders: {asset}, {user}, {ticket}, {window_start}, {window_end}. Pick one at random per ticket. The 'vague' pool drives scenario S2.",
+  "application_restart": [
+    "Restart the application service on {asset} to clear a memory pressure incident raised by ops monitoring earlier today. Limited to systemctl restart plus health checks. No data changes. Rollback: revert to previous service state.",
+    "Routine restart of the Tomcat instance on {asset} as part of the weekly maintenance window {window_start} to {window_end}. Implementer: {user}. No configuration changes; pre- and post-restart health probes will be captured for ticket {ticket}.",
+    "Restart application processes on {asset} after the deployment of build 2026.05.04 to flush stale connection pools. The change has been validated in pre-prod. Backout: roll back to the previous build via the standard release pipeline."
+  ],
+  "os_patching": [
+    "Apply Linux security patches to {asset} as part of the monthly patch cycle. Yum/dnf with --security only. Reboot expected. Implementer: {user}. Window {window_start} to {window_end}.",
+    "OS-level critical CVE remediation on {asset}. Limited to vendor-supplied security errata. No application changes. Reboot at the end of the window. Rollback: snapshot taken before patching.",
+    "Routine kernel patch on {asset} per the security baseline. Standard pre-checks (uptime, df), package update, reboot, post-checks. Ticket {ticket}."
+  ],
+  "network_config": [
+    "Update firewall rules on {asset} to permit traffic from the new monitoring subnet. Adds two iptables/nft rules; no removals. Backout: delete the new rules. Window {window_start} to {window_end}.",
+    "Apply network ACL change on {asset} to support the migration of host-app-orders-02. Two-line nft add. Implementer: {user}. Standard backout.",
+    "Routine routing table refresh on {asset}. Read-only verification (ip route, ss, ping) plus a single static route addition. No services restarted."
+  ],
+  "incident_remediation": [
+    "Investigate the alert raised by the SIEM at 02:14 on {asset}. Initial triage only: log review, system metrics, no remediation actions. Findings to be appended to ticket {ticket}.",
+    "Respond to incident INC-2026-0042: connectivity loss reported by app-payments. Read-only diagnostics on {asset}; remediation actions will be a separate change. Implementer: {user}.",
+    "Triage of the disk-full alarm on {asset}. Read-only investigation: df, du, log inspection. No file deletions; if recovery is required raise a follow-up change."
+  ],
+  "user_access_provisioning": [
+    "Provision the new starter alice.chen on {asset} per the joiner workflow. Adds account, sets shell, assigns to docker group. Removal of leaver accounts is a separate ticket.",
+    "Disable the leaver account old.user on {asset}. Lock account, do NOT delete. Implementer: {user}. Audit log entry to be attached to ticket {ticket}.",
+    "Provision service account svc-deployer on {asset} for the new CI pipeline. SSH key uploaded out-of-band; this change only adds the OS account."
+  ],
+  "certificate_rotation": [
+    "Rotate the TLS certificate for star.example.com on {asset}. Replace pem, reload nginx, verify with openssl s_client. Backup of the previous cert retained.",
+    "Renew the expiring SSL cert on {asset}. Implementer: {user}. Standard cert rotation runbook RB-CERT-001. Window {window_start} to {window_end}.",
+    "Cert rotation on {asset} ahead of the May expiry. Pre-rotation expiry check, copy of new cert, reload of the web server, post-rotation verification."
+  ],
+  "database_maintenance": [
+    "Routine database maintenance on {asset}: read-only diagnostics, EXPLAIN of slow queries, VACUUM ANALYZE on the affected tables, and (if required) creation of one supporting index. No mass exports, no destructive operations on customer-facing tables.",
+    "Index rebuild on {asset} after the recent ETL run inflated table statistics. REINDEX plus ANALYZE. Implementer: {user}. Window {window_start} to {window_end}. No data is altered.",
+    "Diagnostic maintenance window on {asset}. Captures EXPLAIN plans for the slow queries flagged by the platform team; one optional CREATE INDEX may be added subject to approval. Strict no-DELETE / no-DROP policy outside approved migrations."
+  ],
+  "windows_admin": [
+    "Restart the print spooler on {asset} after users reported queue stalls. Open services.msc, restart spooler, verify. Implementer: {user}.",
+    "Apply the monthly Windows update bundle to {asset}. Standard pre-checks via taskmgr / event viewer, install, reboot, post-check. Window {window_start} to {window_end}.",
+    "Investigate the event-log warnings on {asset} reported by the SOC. Read-only review via Event Viewer and Computer Management; no configuration changes."
+  ],
+  "cloud_resource_change": [
+    "Resize the EC2 instance i-0abcd1234 in the prod-1234 account from t3.large to m6i.large to accommodate the increased load on host-app-orders-01. Stop, modify, start. Backout: revert to t3.large. Implementer: {user}.",
+    "Add the new IAM role role-deployer on {asset} for the CI pipeline. Trust policy attaches to the build account only. Permissions limited to the deploy bucket. Window {window_start} to {window_end}.",
+    "KMS key alias/payments rotation on {asset}. Read-only describe-key, then rotate-key. No deletion. Audit log entry for ticket {ticket}."
+  ],
+  "vague": [
+    "fix",
+    "asap",
+    "see slack",
+    "as discussed",
+    "per email",
+    "urgent",
+    "routine",
+    "see email from {user}",
+    "n/a",
+    "see chat",
+    "tbd",
+    "as agreed"
+  ]
+}

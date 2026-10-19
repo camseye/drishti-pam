@@ -1,0 +1,26 @@
+{
+  "_doc": "Sensitive-data keywords scanned by S12 (sensitive-data probing). When a routine-maintenance ticket's session contains commands that touch any of these tokens, S12 fires. The lists are deliberately short and obvious so the rule is auditable.",
+  "pii_columns": [
+    "ssn", "social_security",
+    "credit_card", "cc_number", "card_number", "cvv",
+    "passport", "drivers_license",
+    "salary", "compensation", "bonus",
+    "dob", "date_of_birth"
+  ],
+  "secret_files": [
+    "/etc/shadow", "/etc/passwd",
+    "id_rsa", ".ssh/id_rsa", "id_ed25519",
+    "vault.json", "secrets.txt",
+    ".aws/credentials", ".kube/config",
+    "wallet.dat"
+  ],
+  "sensitive_command_examples": [
+    "SELECT ssn, dob, salary FROM employees;",
+    "SELECT id, name, email, dob, ssn FROM customers WHERE region='AU';",
+    "SELECT card_number, cvv FROM payment_methods LIMIT 1000;",
+    "sudo cat /etc/shadow",
+    "cat ~/.ssh/id_rsa",
+    "sudo cat .aws/credentials",
+    "SELECT salary, compensation FROM hr_employees;"
+  ]
+}

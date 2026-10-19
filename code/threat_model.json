@@ -1,0 +1,297 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "attck_version": "v15.1",
+    "attck_verified_against": "https://attack.mitre.org (verify at write time)",
+    "kill_chain_reference": "Lockheed Martin Cyber Kill Chain (7 phases) + extended phase labels for granularity",
+    "stride_legend": {
+      "S": "Spoofing",
+      "T": "Tampering",
+      "R": "Repudiation",
+      "ID": "Information Disclosure",
+      "DoS": "Denial of Service",
+      "E": "Elevation of Privilege"
+    },
+    "phase_legend": [
+      "Pre-attack",
+      "Initial Access",
+      "Execution",
+      "Persistence",
+      "Privilege Escalation",
+      "Discovery",
+      "Lateral Movement",
+      "Collection",
+      "Actions on Objectives"
+    ],
+    "confidence_legend": {
+      "high": "Scenario maps cleanly to one or more named ATT&CK techniques",
+      "medium": "Scenario has plausible ATT&CK fit but is multi-cause",
+      "low": "Scenario is a governance/process failure, not a technical attack pattern"
+    },
+    "last_updated": "2026-05-13"
+  },
+
+  "scenarios": {
+    "S1": {
+      "name": "Multi-user ticket",
+      "description": "Lots of different people sharing one change ticket within an hour",
+      "stride": ["R", "T"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0001", "name": "Initial Access"},
+          {"id": "TA0008", "name": "Lateral Movement"}
+        ],
+        "techniques": [
+          {"id": "T1078", "name": "Valid Accounts"},
+          {"id": "T1199", "name": "Trusted Relationship"}
+        ]
+      },
+      "kill_chain_phase": ["Initial Access", "Lateral Movement"],
+      "confidence": "high",
+      "notes": ""
+    },
+
+    "S2": {
+      "name": "Vague justification",
+      "description": "Justification text too thin to defend",
+      "stride": ["R", "ID"],
+      "is_governance_only": true,
+      "attck": {
+        "tactics": [],
+        "techniques": []
+      },
+      "kill_chain_phase": ["Pre-attack"],
+      "confidence": "low",
+      "notes": "Governance failure rather than a technical attack pattern. Included for completeness; treated as audit/process risk, not ATT&CK-mappable behaviour."
+    },
+
+    "S3": {
+      "name": "Off-window session",
+      "description": "Work outside the approved time window",
+      "stride": ["R"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0001", "name": "Initial Access"},
+          {"id": "TA0008", "name": "Lateral Movement"}
+        ],
+        "techniques": [
+          {"id": "T1078", "name": "Valid Accounts"}
+        ]
+      },
+      "kill_chain_phase": ["Initial Access"],
+      "confidence": "high",
+      "notes": ""
+    },
+
+    "S4": {
+      "name": "Wrong-category commands",
+      "description": "Commands don't match what the ticket said",
+      "stride": ["T", "ID"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0002", "name": "Execution"},
+          {"id": "TA0009", "name": "Collection"}
+        ],
+        "techniques": [
+          {"id": "T1078", "name": "Valid Accounts"},
+          {"id": "T1213", "name": "Data from Information Repositories"}
+        ]
+      },
+      "kill_chain_phase": ["Execution", "Collection"],
+      "confidence": "medium",
+      "notes": "Multi-cause: commands could indicate scope creep, error, or malicious intent. ATT&CK mapping is generic."
+    },
+
+    "S5": {
+      "name": "Off-hours work",
+      "description": "Session starts outside business hours",
+      "stride": ["R"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0001", "name": "Initial Access"}
+        ],
+        "techniques": [
+          {"id": "T1078", "name": "Valid Accounts"}
+        ]
+      },
+      "kill_chain_phase": ["Initial Access"],
+      "confidence": "high",
+      "notes": ""
+    },
+
+    "S7": {
+      "name": "Destructive on read-only",
+      "description": "DELETE/DROP/TRUNCATE on a ticket that only authorised reads",
+      "stride": ["T", "DoS"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0040", "name": "Impact"}
+        ],
+        "techniques": [
+          {"id": "T1485", "name": "Data Destruction"},
+          {"id": "T1561", "name": "Disk Wipe"}
+        ]
+      },
+      "kill_chain_phase": ["Actions on Objectives"],
+      "confidence": "high",
+      "notes": ""
+    },
+
+    "S10": {
+      "name": "Out-of-scope asset",
+      "description": "Commands run against a server the ticket didn't allow",
+      "stride": ["T", "ID"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0008", "name": "Lateral Movement"}
+        ],
+        "techniques": [
+          {"id": "T1078", "name": "Valid Accounts"},
+          {"id": "T1021", "name": "Remote Services"}
+        ]
+      },
+      "kill_chain_phase": ["Lateral Movement"],
+      "confidence": "high",
+      "notes": ""
+    },
+
+    "S11": {
+      "name": "Zombie ticket",
+      "description": "Same ticket reused over many days, often after the window closed",
+      "stride": ["R"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0003", "name": "Persistence"},
+          {"id": "TA0008", "name": "Lateral Movement"}
+        ],
+        "techniques": [
+          {"id": "T1078", "name": "Valid Accounts"},
+          {"id": "T1098", "name": "Account Manipulation"}
+        ]
+      },
+      "kill_chain_phase": ["Persistence"],
+      "confidence": "medium",
+      "notes": "T1098 fit is partial \u2014 Account Manipulation usually means modifying account permissions; here it is manipulating the ticket lifecycle."
+    },
+
+    "S12": {
+      "name": "Sensitive-data probing",
+      "description": "Queries against PII columns or secret files",
+      "stride": ["ID"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0009", "name": "Collection"}
+        ],
+        "techniques": [
+          {"id": "T1213", "name": "Data from Information Repositories"},
+          {"id": "T1005", "name": "Data from Local System"}
+        ]
+      },
+      "kill_chain_phase": ["Collection"],
+      "confidence": "high",
+      "notes": ""
+    },
+
+    "S13": {
+      "name": "Lateral movement",
+      "description": "Probing or jumping to servers not on the ticket",
+      "stride": ["E", "ID"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0007", "name": "Discovery"},
+          {"id": "TA0008", "name": "Lateral Movement"}
+        ],
+        "techniques": [
+          {"id": "T1021", "name": "Remote Services"},
+          {"id": "T1018", "name": "Remote System Discovery"}
+        ]
+      },
+      "kill_chain_phase": ["Discovery", "Lateral Movement"],
+      "confidence": "high",
+      "notes": ""
+    },
+
+    "S14": {
+      "name": "Privilege escalation",
+      "description": "sudo/su without authority",
+      "stride": ["E", "T"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0004", "name": "Privilege Escalation"}
+        ],
+        "techniques": [
+          {"id": "T1078", "name": "Valid Accounts"},
+          {"id": "T1548", "name": "Abuse Elevation Control Mechanism"}
+        ]
+      },
+      "kill_chain_phase": ["Privilege Escalation"],
+      "confidence": "high",
+      "notes": ""
+    },
+
+    "S15": {
+      "name": "Approver-as-implementer",
+      "description": "The same person requested AND approved the change",
+      "stride": ["R", "T"],
+      "is_governance_only": true,
+      "attck": {
+        "tactics": [
+          {"id": "TA0001", "name": "Initial Access"}
+        ],
+        "techniques": [
+          {"id": "T1078.002", "name": "Valid Accounts: Domain Accounts"}
+        ]
+      },
+      "kill_chain_phase": ["Initial Access"],
+      "confidence": "low",
+      "notes": "Segregation-of-duties violation. T1078.002 is the closest ATT&CK fit (an authorised account is being used outside intended controls), but the root cause is governance, not attack technique. Treated as such throughout the dashboard."
+    },
+
+    "S16": {
+      "name": "Vocabulary-cloak adversarial",
+      "description": "Destructive intent expressed via paraphrased SQL (CALL purge_*, ALTER ... RENAME TO _orphaned_*, EXEC sp_purgehistory) that avoids the rule detector's literal trigger phrases, paired with a justification engineered to share vocabulary with the cloaked commands so the s5 keyword-overlap compliance signal also passes.",
+      "stride": ["T", "DoS", "R"],
+      "is_governance_only": false,
+      "attck": {
+        "tactics": [
+          {"id": "TA0005", "name": "Defense Evasion"},
+          {"id": "TA0040", "name": "Impact"}
+        ],
+        "techniques": [
+          {"id": "T1027.010", "name": "Obfuscated Files or Information: Command Obfuscation"},
+          {"id": "T1485", "name": "Data Destruction"}
+        ]
+      },
+      "kill_chain_phase": ["Actions on Objectives"],
+      "confidence": "high",
+      "notes": "Adversarial control-evaluation scenario added 2026-05-13. Designed by construction to defeat the rule detector (which never fires on S16, as the paraphrased commands lack the trigger phrases the rule matches on) so the LLM-detector recall on S16 measures how well the trained model generalises beyond literal keywords. Rule recall on S16 is the headline finding of \u00a77."
+    }
+  },
+
+  "coverage_summary": {
+    "total_scenarios": 13,
+    "governance_only_count": 2,
+    "governance_only_ids": ["S2", "S15"],
+    "adversarial_count": 1,
+    "adversarial_ids": ["S16"],
+    "unique_techniques_covered": 12,
+    "unique_tactics_covered": 9,
+    "kill_chain_phases_covered": 9,
+    "stride_categories_present": ["T", "R", "ID", "DoS", "E"],
+    "confidence_distribution": {
+      "high": 9,
+      "medium": 2,
+      "low": 2
+    }
+  }
+}

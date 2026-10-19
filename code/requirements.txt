@@ -1,0 +1,34 @@
+# Drishti-PAM — runtime dependencies.
+#
+# Tested with Python 3.13 and 3.14 on Windows / Linux as of May 2026.
+# The mock pipeline (default) only needs the first three packages; the
+# Hugging Face backend (--backend huggingface) needs the rest.
+
+# --- Core (mock pipeline, ~10 s end-to-end) -----------------------------
+faker>=22.0
+matplotlib>=3.8
+reportlab>=4.0
+tqdm>=4.66           # progress bars — used by every long-running stage
+
+# --- Hugging Face backend (cloud / GPU workstation) ---------------------
+# transformers v5.0 (Jan 2026) removed the text2text-generation pipeline
+# and the legacy `Trainer(tokenizer=...)` kwarg; we use the modern API.
+# Pin >= 5.5 to also pick up the Python 3.14 annotations fix (PR #44672,
+# March 2026). transformers v5+ is PyTorch-only — no TF/JAX, smaller deps.
+transformers>=5.5,<6
+datasets>=3.0
+accelerate>=1.0
+huggingface_hub>=1.0
+
+# torch is intentionally NOT pinned in this file — pip's default index
+# only ships the CPU build on Windows, and a CPU torch makes DistilBERT
+# fine-tuning a 30-min job. For GPU acceleration on Windows install
+# torch separately from the CUDA index BEFORE running pip install -r:
+#
+#   pip install torch --index-url https://download.pytorch.org/whl/cu126
+#   pip install -r requirements.txt
+#
+# Or run setup_gpu.ps1 which detects your CUDA version and picks the
+# right wheel. On Linux / macOS / Kaggle the default index already
+# carries the right wheel and `pip install torch>=2.7` is enough.
+torch>=2.7
